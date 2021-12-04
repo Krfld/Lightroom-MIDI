@@ -4,5 +4,9 @@
 			"path": "ESP32_MIDI"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"*.ipp": "cpp"
+		}
+	}
 }
