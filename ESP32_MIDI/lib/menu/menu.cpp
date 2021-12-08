@@ -1,5 +1,7 @@
 #include "menu.h"
 
+// Change to .h
+
 class Menu
 {
 
