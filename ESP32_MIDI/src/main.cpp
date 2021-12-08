@@ -1,7 +1,8 @@
-#include <Control_Surface.h>
+#include "main.h"
 
 void setup()
 {
+	Menu menu;
 }
 
 void loop()
