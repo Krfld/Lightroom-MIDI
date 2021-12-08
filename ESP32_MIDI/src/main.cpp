@@ -14,7 +14,6 @@ void setup()
 	Serial.begin(115200);
 
 	std::function<void()> functions[9] = {bruh};
-
 	RotaryEncoder re(functions);
 }
 

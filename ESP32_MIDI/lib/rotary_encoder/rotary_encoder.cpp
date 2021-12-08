@@ -11,7 +11,8 @@ RotaryEncoder::RotaryEncoder(std::function<void()> *functions)
 void RotaryEncoder::pressed()
 {
 	value = DEFAULT_VALUE; // Reset
-						   // Send MIDI
+
+	// Send MIDI
 }
 
 void RotaryEncoder::released() {} // ...
