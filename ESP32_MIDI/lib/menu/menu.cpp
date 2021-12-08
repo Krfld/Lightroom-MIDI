@@ -1,32 +1,22 @@
 #include "menu.h"
 
-// Change to .h
-
-class Menu
+int Menu::getMenu()
 {
+	return menu;
+};
 
-private:
-	int menu;
+void Menu::nextMenu()
+{
+	if (menu == Calibration)
+		menu = Basic;
+	else
+		menu++;
+};
 
-public:
-	int getMenu()
-	{
-		return menu;
-	}
-
-	void nextMenu()
-	{
-		if (menu == Calibration)
-			menu = Basic;
-		else
-			menu++;
-	}
-
-	void previusMenu()
-	{
-		if (menu == Basic)
-			menu = Calibration;
-		else
-			menu--;
-	}
+void Menu::previousMenu()
+{
+	if (menu == Basic)
+		menu = Calibration;
+	else
+		menu--;
 };

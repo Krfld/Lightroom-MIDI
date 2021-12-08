@@ -3,7 +3,7 @@
 
 void setup()
 {
-	Menu menu;
+	Serial.begin(115200);
 }
 
 void loop()

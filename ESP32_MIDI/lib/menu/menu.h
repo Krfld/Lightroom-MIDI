@@ -10,3 +10,15 @@ enum Menus
 	Effects,
 	Calibration
 };
+
+class Menu
+{
+private:
+	Menu();
+	static int menu;
+
+public:
+	static int getMenu();
+	static void nextMenu();
+	static void previousMenu();
+};
