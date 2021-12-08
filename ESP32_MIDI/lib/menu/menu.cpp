@@ -9,7 +9,7 @@ void Menu::nextMenu()
 	if (menu == Menus::Calibration)
 		menu = Menus::Basic;
 	else
-		menu = Menus(static_cast<int>(menu) + 1);
+		menu = Menus((int)menu + 1);
 }
 
 void Menu::previousMenu()
@@ -17,5 +17,5 @@ void Menu::previousMenu()
 	if (menu == Menus::Basic)
 		menu = Menus::Calibration;
 	else
-		menu = Menus(static_cast<int>(menu) - 1);
+		menu = Menus((int)menu - 1);
 }
