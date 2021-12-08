@@ -2,16 +2,17 @@
 
 class Menu
 {
+
 private:
-	static int menu;
+	int menu;
 
 public:
-	static int getMenu()
+	int getMenu()
 	{
 		return menu;
 	}
 
-	static void nextMenu()
+	void nextMenu()
 	{
 		if (menu == Calibration)
 			menu = Basic;
@@ -19,7 +20,7 @@ public:
 			menu++;
 	}
 
-	static void previusMenu()
+	void previusMenu()
 	{
 		if (menu == Basic)
 			menu = Calibration;
