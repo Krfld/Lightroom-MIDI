@@ -1,6 +1,10 @@
-enum Menus
+#ifndef MENU_H
+#define MENU_H
+
+enum class Menus
 {
-	Basic,
+	None,
+	Basic = 1,
 	ToneCurve,
 	HSL_Color,
 	ColorGrading,
@@ -15,10 +19,13 @@ class Menu
 {
 private:
 	Menu();
-	static int menu;
+	static Menus menu;
 
+protected:
 public:
-	static int getMenu();
+	static Menus getMenu();
 	static void nextMenu();
 	static void previousMenu();
 };
+
+#endif // MENU_H

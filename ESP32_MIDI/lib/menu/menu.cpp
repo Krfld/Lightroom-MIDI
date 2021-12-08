@@ -1,22 +1,21 @@
 #include "menu.h"
 
-int Menu::getMenu()
-{
-	return menu;
-};
+Menus Menu::menu{Menus::Basic};
+
+Menus Menu::getMenu() { return menu; }
 
 void Menu::nextMenu()
 {
-	if (menu == Calibration)
-		menu = Basic;
+	if (menu == Menus::Calibration)
+		menu = Menus::Basic;
 	else
-		menu++;
-};
+		menu = Menus(static_cast<int>(menu) + 1);
+}
 
 void Menu::previousMenu()
 {
-	if (menu == Basic)
-		menu = Calibration;
+	if (menu == Menus::Basic)
+		menu = Menus::Calibration;
 	else
-		menu--;
-};
+		menu = Menus(static_cast<int>(menu) - 1);
+}
