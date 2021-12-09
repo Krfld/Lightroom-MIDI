@@ -2,7 +2,7 @@
 
 Menus Menu::menu{Menus::Basic};
 
-Menus Menu::getMenu() { return menu; }
+Menus Menu::currentMenu() { return menu; }
 
 void Menu::nextMenu()
 {

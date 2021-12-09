@@ -2,7 +2,6 @@
 #define ROTARY_ENCODER_H
 
 #include <map>
-#include <functional>
 
 #include "menu.h"
 
@@ -16,16 +15,16 @@ class RotaryEncoder
 {
 private:
 	const int MAX_VALUE = 127;
-	const int DEFAULT_VALUE = 64; // 63/64
+	const int DEFAULT_VALUE = 63; // 63/64
 	const int MIN_VALUE = 0;
 
-	int value = DEFAULT_VALUE;
+	std::map<Menus, int> values;
 
-	std::map<Menus, std::function<void()>> functions;
+	/*std::map<Menus, void (*)(int)> functions;*/
 
 protected:
 public:
-	RotaryEncoder(std::function<void()> *);
+	RotaryEncoder(/*void (*[9])(int)*/);
 
 	void pressed();
 	void released();

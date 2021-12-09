@@ -12,7 +12,8 @@ enum class Menus
 	LensCorrections,
 	Transform,
 	Effects,
-	Calibration
+	Calibration,
+	MENUS_COUNT = 9
 };
 
 class Menu
@@ -23,7 +24,7 @@ private:
 
 protected:
 public:
-	static Menus getMenu();
+	static Menus currentMenu();
 	static void nextMenu();
 	static void previousMenu();
 };
