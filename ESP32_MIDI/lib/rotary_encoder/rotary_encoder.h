@@ -26,6 +26,7 @@ protected:
 public:
 	RotaryEncoder(/*void (*[9])(int)*/);
 
+	bool isActive();
 	void pressed();
 	void released();
 	void rotated(RotationDirection);
