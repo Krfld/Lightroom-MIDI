@@ -1,14 +1,18 @@
 #ifndef ROTARY_ENCODER_H
 #define ROTARY_ENCODER_H
 
-#include <map>
-
-#include "menu.h"
+#include "lightroom.h"
 
 enum class RotationDirection
 {
 	CLOCKWISE = 1,
 	COUNTER_CLOCKWISE = -1
+};
+
+enum class RotaryEncoderState
+{
+	Pressed,
+	Rotated
 };
 
 class RotaryEncoder
@@ -22,11 +26,11 @@ private:
 
 	std::map<Menus, int> values;
 
-	/*std::map<Menus, void (*)(int)> functions;*/
+	std::map<Menus, std::map<int, std::map<RotaryEncoderState, void (*)()>>> functions;
 
 protected:
 public:
-	RotaryEncoder(int /*void (*[9])(int)*/);
+	RotaryEncoder(int);
 
 	bool isActive();
 	void rotated(RotationDirection);

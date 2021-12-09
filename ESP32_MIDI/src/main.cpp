@@ -34,10 +34,7 @@ void setup()
 
 	btns[0].pressed();
 
-	Serial.println((int)Menu::currentMenu());
-	Menu::nextMenu();
-	Serial.println((int)Menu::currentMenu());
-
+	Serial.println(Sections.at(Menus::Basic));
 	// void (*f[9])(int) = {bruh};
 }
 
