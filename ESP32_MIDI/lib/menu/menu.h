@@ -21,6 +21,7 @@ class Menu
 private:
 	Menu();
 	static Menus menu;
+	static int section;
 
 protected:
 public:

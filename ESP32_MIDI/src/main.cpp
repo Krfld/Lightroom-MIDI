@@ -7,6 +7,11 @@
 void bruh(int x)
 {
 	Serial.println("bruh");
+}
+
+void setup()
+{
+	Serial.begin(115200);
 
 	RotaryEncoder res[8] = {
 		RotaryEncoder(1),
@@ -26,11 +31,12 @@ void bruh(int x)
 		Button(4),
 		Button(5),
 	};
-}
 
-void setup()
-{
-	Serial.begin(115200);
+	btns[0].pressed();
+
+	Serial.println((int)Menu::currentMenu());
+	Menu::nextMenu();
+	Serial.println((int)Menu::currentMenu());
 
 	// void (*f[9])(int) = {bruh};
 }
