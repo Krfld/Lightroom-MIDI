@@ -1,6 +1,6 @@
 #include "rotary_encoder.h"
 
-RotaryEncoder::RotaryEncoder(/*void (*functions[9])(int)*/)
+RotaryEncoder::RotaryEncoder(int id /*void (*functions[9])(int)*/) : id(id)
 {
 	// for (int i = 0; i < 9; i++)
 	// 	this->functions.insert(std::make_pair(Menus(i + 1), functions[i]));
@@ -14,6 +14,7 @@ RotaryEncoder::RotaryEncoder(/*void (*functions[9])(int)*/)
 bool RotaryEncoder::isActive()
 {
 	// TODO
+	return true;
 }
 
 void RotaryEncoder::rotated(RotationDirection rotation)
@@ -21,10 +22,14 @@ void RotaryEncoder::rotated(RotationDirection rotation)
 	if (!isActive())
 		return;
 
-	if (rotation == RotationDirection::CLOCKWISE && this->values[Menu::currentMenu()] < MAX_VALUE)
-		this->values[Menu::currentMenu()]++;
-	else if (rotation == RotationDirection::COUNTER_CLOCKWISE && this->values[Menu::currentMenu()] > MIN_VALUE)
-		this->values[Menu::currentMenu()]--;
+	int value = this->values[Menu::currentMenu()];
+
+	if (rotation == RotationDirection::CLOCKWISE && value < MAX_VALUE)
+		value++;
+	else if (rotation == RotationDirection::COUNTER_CLOCKWISE && value > MIN_VALUE)
+		value--;
+
+	this->values[Menu::currentMenu()] = value;
 
 	// TODO Send MIDI
 }
@@ -39,4 +44,4 @@ void RotaryEncoder::pressed()
 	// TODO Send MIDI
 }
 
-void RotaryEncoder::released() {} // ...
+// void RotaryEncoder::released() {} // ...

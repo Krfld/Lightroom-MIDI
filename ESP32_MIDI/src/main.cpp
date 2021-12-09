@@ -1,24 +1,31 @@
 #include "main.h"
 
 //* Testing
-#include "menu.h"
+#include "button.h"
 #include "rotary_encoder.h"
-
-class Logic
-{
-private:
-	Logic();
-
-protected:
-public:
-	static void rotaryEncoderOnRotated(int);
-	static void rotaryEncoderOnPressed();
-	static void buttonOnPressed();
-};
 
 void bruh(int x)
 {
 	Serial.println("bruh");
+
+	RotaryEncoder res[8] = {
+		RotaryEncoder(1),
+		RotaryEncoder(2),
+		RotaryEncoder(3),
+		RotaryEncoder(4),
+		RotaryEncoder(5),
+		RotaryEncoder(6),
+		RotaryEncoder(7),
+		RotaryEncoder(8),
+	};
+
+	Button btns[5] = {
+		Button(1),
+		Button(2),
+		Button(3),
+		Button(4),
+		Button(5),
+	};
 }
 
 void setup()

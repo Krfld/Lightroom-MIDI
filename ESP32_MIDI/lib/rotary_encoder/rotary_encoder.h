@@ -14,6 +14,8 @@ enum class RotationDirection
 class RotaryEncoder
 {
 private:
+	const int id;
+
 	const int MAX_VALUE = 127;
 	const int DEFAULT_VALUE = 63; // 63/64
 	const int MIN_VALUE = 0;
@@ -24,12 +26,12 @@ private:
 
 protected:
 public:
-	RotaryEncoder(/*void (*[9])(int)*/);
+	RotaryEncoder(int /*void (*[9])(int)*/);
 
 	bool isActive();
-	void pressed();
-	void released();
 	void rotated(RotationDirection);
+	void pressed();
+	// void released();
 };
 
 #endif // ROTARY_ENCODER_H
