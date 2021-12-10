@@ -28,6 +28,9 @@ private:
 
 	std::map<Menus, std::map<int, int>> values; // {Menu: {Section: value}}
 
+	// std::map<Menus, std::map<int, >> x;
+	// {Menu: {Section: {Id, {RotaryEncoderState, ControlValue}}}}
+
 	// std::map<Menus, std::map<int, std::map<RotaryEncoderState, void (*)()>>> functions;
 
 protected:

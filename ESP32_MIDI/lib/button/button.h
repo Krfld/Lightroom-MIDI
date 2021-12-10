@@ -3,7 +3,7 @@
 
 #include "menus_sections.h"
 
-class Button
+class Button final
 {
 private:
 	const int id;

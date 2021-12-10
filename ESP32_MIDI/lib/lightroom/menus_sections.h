@@ -23,7 +23,7 @@ enum class Menus
 	TOTAL_MENUS = 9
 };
 
-class Menu
+class Menu final
 {
 private:
 	Menu();
@@ -49,7 +49,7 @@ const std::map<Menus, int> Sections = {
 	{Menus::Calibration, 1},
 };
 
-class Section
+class Section final
 {
 private:
 	Section();
