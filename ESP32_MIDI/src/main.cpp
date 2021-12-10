@@ -11,7 +11,7 @@ void setup()
 {
 	Serial.begin(115200);
 
-		// RotaryEncoder res[8] = {
+	// RotaryEncoder res[8] = {
 	// 	RotaryEncoder(1),
 	// 	RotaryEncoder(2),
 	// 	RotaryEncoder(3),
