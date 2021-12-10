@@ -1,7 +1,9 @@
 #ifndef ROTARY_ENCODER_H
 #define ROTARY_ENCODER_H
 
-#include "lightroom.h"
+#include <map>
+
+#include "menus_sections.h"
 
 enum class RotationDirection
 {
@@ -24,9 +26,9 @@ private:
 	const int DEFAULT_VALUE = 63; // 63/64
 	const int MIN_VALUE = 0;
 
-	std::map<Menus, int> values;
+	std::map<Menus, std::map<int, int>> values; // {Menu: {Section: value}}
 
-	std::map<Menus, std::map<int, std::map<RotaryEncoderState, void (*)()>>> functions;
+	// std::map<Menus, std::map<int, std::map<RotaryEncoderState, void (*)()>>> functions;
 
 protected:
 public:

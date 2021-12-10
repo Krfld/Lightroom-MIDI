@@ -1,8 +1,6 @@
 #include "main.h"
 
-//* Testing
-#include "button.h"
-#include "rotary_encoder.h"
+#include "lightroom.h"
 
 void bruh(int x)
 {
@@ -13,28 +11,28 @@ void setup()
 {
 	Serial.begin(115200);
 
-	RotaryEncoder res[8] = {
-		RotaryEncoder(1),
-		RotaryEncoder(2),
-		RotaryEncoder(3),
-		RotaryEncoder(4),
-		RotaryEncoder(5),
-		RotaryEncoder(6),
-		RotaryEncoder(7),
-		RotaryEncoder(8),
-	};
+	// RotaryEncoder res[8] = {
+	// 	RotaryEncoder(1),
+	// 	RotaryEncoder(2),
+	// 	RotaryEncoder(3),
+	// 	RotaryEncoder(4),
+	// 	RotaryEncoder(5),
+	// 	RotaryEncoder(6),
+	// 	RotaryEncoder(7),
+	// 	RotaryEncoder(8),
+	// };
 
-	Button btns[5] = {
-		Button(1),
-		Button(2),
-		Button(3),
-		Button(4),
-		Button(5),
-	};
+	// Button btns[5] = {
+	// 	Button(1),
+	// 	Button(2),
+	// 	Button(3),
+	// 	Button(4),
+	// 	Button(5),
+	// };
 
-	btns[0].pressed();
+	// btns[0].pressed();
 
-	Serial.println(Sections.at(Menus::Basic));
+	// Serial.println(Sections.at(Menus::Basic));
 	// void (*f[9])(int) = {bruh};
 }
 
