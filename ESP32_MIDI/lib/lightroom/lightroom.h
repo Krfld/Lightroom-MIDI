@@ -3,10 +3,20 @@
 
 #include <map>
 
-#include "lightroom.h"
+#include "button.h"
+#include "rotary_encoder.h"
+
+#define EDIT_BUTTONS_NUM 4
+#define EDIT_ROTARY_ENCODERS_NUM 8
+
+//* Devices
+struct Devices
+{
+	Button buttons[EDIT_BUTTONS_NUM];
+	RotaryEncoder rotaryEncoders[EDIT_ROTARY_ENCODERS_NUM];
+};
 
 //* Menus
-
 enum class Menus
 {
 	None,
@@ -40,7 +50,6 @@ public:
 };
 
 //* Sections
-
 const std::map<Menus, int> Sections = {
 	{Menus::Basic, 2},
 	{Menus::ToneCurve, 1},
