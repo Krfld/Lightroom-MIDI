@@ -7,7 +7,7 @@ Button::Button(Adafruit_MCP23X17 *mcp, int pin, Led *led) : mcp(mcp), pin(pin), 
 
 // ----------------------------------------------------------------------------------------------------
 
-bool Button::state()
+DeviceState Button::state()
 {
-	return !mcp->digitalRead(pin);
+	return (DeviceState)!mcp->digitalRead(pin);
 }

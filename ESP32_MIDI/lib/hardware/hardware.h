@@ -5,19 +5,19 @@
 
 #include "Adafruit_MCP23X17.h"
 
-// class Devices
-// {
-// private:
-// 	Devices();
+enum DeviceState
+{
+	Idle = 0b000,
+	Pressed = 0b001,
+	RotatedRight = 0b010,
+	RotatedLeft = 0b100,
+};
 
-// 	static Adafruit_MCP23X17 *mcps;
-// 	static Button *buttons;
-// 	static Knob *knobs;
-// 	static Led *leds;
-
-// public:
-// static int get
-// };
+enum LedState
+{
+	Off,
+	On,
+};
 
 // ----------------------------------------------------------------------------------------------------
 
@@ -44,7 +44,7 @@ private:
 public:
 	Button(Adafruit_MCP23X17 *mcp, int pin);
 	Button(Adafruit_MCP23X17 *mcp, int pin, Led *led);
-	bool state();
+	DeviceState state();
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -60,9 +60,10 @@ private:
 
 public:
 	Knob(Adafruit_MCP23X17 *mcp, int pinA, int pinB);
+	Knob(Adafruit_MCP23X17 *mcp, int pinA, int pinB, Led *led);
 	Knob(Adafruit_MCP23X17 *mcp, int pinA, int pinB, Button *button);
 	Knob(Adafruit_MCP23X17 *mcp, int pinA, int pinB, Button *button, Led *led);
-	bool state();
+	DeviceState state();
 };
 
 #endif // HARDWARE_H

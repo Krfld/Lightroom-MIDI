@@ -7,6 +7,9 @@ Knob::Knob(Adafruit_MCP23X17 *mcp, int pinA, int pinB, Button *button, Led *led)
 	mcp->pinMode(pinB, INPUT_PULLUP);
 }
 
+Knob::Knob(Adafruit_MCP23X17 *mcp, int pinA, int pinB, Led *led)
+	: Knob(mcp, pinA, pinB, NULL, led) {}
+
 Knob::Knob(Adafruit_MCP23X17 *mcp, int pinA, int pinB, Button *button)
 	: Knob(mcp, pinA, pinB, button, NULL) {}
 
@@ -15,7 +18,8 @@ Knob::Knob(Adafruit_MCP23X17 *mcp, int pinA, int pinB)
 
 // ----------------------------------------------------------------------------------------------------
 
-bool Knob::state()
+DeviceState Knob::state()
 {
-	return !mcp->digitalRead(button->state());
+	// TODO Debounce state machine
+	return (DeviceState)(button->state());
 }
