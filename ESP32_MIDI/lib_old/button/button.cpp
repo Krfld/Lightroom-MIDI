@@ -2,7 +2,7 @@
 
 Button::Button(int id) : id(id)
 {
-	// TODO Define pins
+	// TODO Define pins & config inputs and outputs
 }
 
 bool Button::isActive()

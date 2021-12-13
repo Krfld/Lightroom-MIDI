@@ -8,7 +8,7 @@ class Button final
 private:
 	const int id;
 
-	const int MAX_VELOCITY = 127;
+	// const int MAX_VELOCITY = 127;
 
 protected:
 public:
