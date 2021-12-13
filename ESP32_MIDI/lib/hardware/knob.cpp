@@ -23,3 +23,8 @@ DeviceState Knob::state()
 	// TODO Debounce state machine
 	return (DeviceState)(button->state());
 }
+
+void Knob::set(LedState state)
+{
+	led->set(state);
+}

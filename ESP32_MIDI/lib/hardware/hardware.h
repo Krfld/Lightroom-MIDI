@@ -29,7 +29,7 @@ private:
 
 public:
 	Led(Adafruit_MCP23X17 *mcp, int pin);
-	void set(bool state);
+	void set(LedState state);
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -58,12 +58,15 @@ private:
 	Button *button;
 	Led *led;
 
+	int value;
+
 public:
 	Knob(Adafruit_MCP23X17 *mcp, int pinA, int pinB);
 	Knob(Adafruit_MCP23X17 *mcp, int pinA, int pinB, Led *led);
 	Knob(Adafruit_MCP23X17 *mcp, int pinA, int pinB, Button *button);
 	Knob(Adafruit_MCP23X17 *mcp, int pinA, int pinB, Button *button, Led *led);
 	DeviceState state();
+	void set(LedState state);
 };
 
 #endif // HARDWARE_H

@@ -7,7 +7,7 @@ Led::Led(Adafruit_MCP23X17 *mcp, int pin) : mcp(mcp), pin(pin)
 
 // ----------------------------------------------------------------------------------------------------
 
-void Led::set(bool state)
+void Led::set(LedState state)
 {
 	mcp->digitalWrite(pin, state);
 }
