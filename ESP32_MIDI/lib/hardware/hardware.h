@@ -4,21 +4,23 @@
 #include <Arduino.h>
 
 #include "Adafruit_MCP23X17.h"
-#include "Encoder.h"
 
-// _________
-class Button
-{
-private:
-	Adafruit_MCP23X17 *mcp;
-	int pin;
+// class Devices
+// {
+// private:
+// 	Devices();
 
-public:
-	Button(Adafruit_MCP23X17 *mcp, int pin);
-	bool isPressed();
-};
+// 	static Adafruit_MCP23X17 *mcps;
+// 	static Button *buttons;
+// 	static Knob *knobs;
+// 	static Led *leds;
 
-// ______
+// public:
+// static int get
+// };
+
+// ----------------------------------------------------------------------------------------------------
+
 class Led
 {
 private:
@@ -30,18 +32,37 @@ public:
 	void set(bool state);
 };
 
-// ________________
-class RotaryEncoder
+// ----------------------------------------------------------------------------------------------------
+
+class Button
 {
 private:
 	Adafruit_MCP23X17 *mcp;
-	// Encoder encoder;
-	Button button;
-	Led led;
+	int pin;
+	Led *led;
 
 public:
-	RotaryEncoder(Adafruit_MCP23X17 *mcp, int encoderPinA, int encoderPinB, Button button, Led led);
-	bool isPressed();
+	Button(Adafruit_MCP23X17 *mcp, int pin);
+	Button(Adafruit_MCP23X17 *mcp, int pin, Led *led);
+	bool state();
+};
+
+// ----------------------------------------------------------------------------------------------------
+
+class Knob
+{
+private:
+	Adafruit_MCP23X17 *mcp;
+	int pinA;
+	int pinB;
+	Button *button;
+	Led *led;
+
+public:
+	Knob(Adafruit_MCP23X17 *mcp, int pinA, int pinB);
+	Knob(Adafruit_MCP23X17 *mcp, int pinA, int pinB, Button *button);
+	Knob(Adafruit_MCP23X17 *mcp, int pinA, int pinB, Button *button, Led *led);
+	bool state();
 };
 
 #endif // HARDWARE_H
