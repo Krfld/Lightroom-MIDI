@@ -30,6 +30,7 @@ public:
 	void set(bool state);
 };
 
+// ________________
 class RotaryEncoder
 {
 private:
