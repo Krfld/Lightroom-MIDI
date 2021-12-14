@@ -1,26 +1,26 @@
 #include "hardware.h"
 
-Knob::Knob(Adafruit_MCP23X17 *mcp, uint8_t pinA, uint8_t pinB, Button *button, Led *led)
-	: _mcp(mcp), _pinA(pinA), _pinB(pinB), _button(button), _led(led)
+Knob::Knob(Expander expander, uint8_t pinA, uint8_t pinB, Button *button, Led *led)
+	: _expander(expander), _pinA(pinA), _pinB(pinB), _button(button), _led(led)
 {
-	_mcp->pinMode(_pinA, INPUT_PULLUP);
-	_mcp->pinMode(_pinB, INPUT_PULLUP);
+	_expander->pinMode(_pinA, INPUT_PULLUP);
+	_expander->pinMode(_pinB, INPUT_PULLUP);
 
 	_pinState = _readPins();
 }
 
-Knob::Knob(Adafruit_MCP23X17 *mcp, uint8_t pinA, uint8_t pinB, Led *led)
-	: Knob(mcp, pinA, pinB, NULL, led) {}
+Knob::Knob(Expander expander, uint8_t pinA, uint8_t pinB, Led *led)
+	: Knob(expander, pinA, pinB, NULL, led) {}
 
-Knob::Knob(Adafruit_MCP23X17 *mcp, uint8_t pinA, uint8_t pinB, Button *button)
-	: Knob(mcp, pinA, pinB, button, NULL) {}
+Knob::Knob(Expander expander, uint8_t pinA, uint8_t pinB, Button *button)
+	: Knob(expander, pinA, pinB, button, NULL) {}
 
-Knob::Knob(Adafruit_MCP23X17 *mcp, uint8_t pinA, uint8_t pinB)
-	: Knob(mcp, pinA, pinB, NULL, NULL) {}
+Knob::Knob(Expander expander, uint8_t pinA, uint8_t pinB)
+	: Knob(expander, pinA, pinB, NULL, NULL) {}
 
 // ----------------------------------------------------------------------------------------------------
 
-uint8_t Knob::_readPins() { return _mcp->digitalRead(_pinA) << 1 | _mcp->digitalRead(_pinB) << 0; }
+uint8_t Knob::_readPins() { return _expander->digitalRead(_pinA) << 1 | _expander->digitalRead(_pinB) << 0; }
 
 // ----------------------------------------------------------------------------------------------------
 

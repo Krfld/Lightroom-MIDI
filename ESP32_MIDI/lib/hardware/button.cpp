@@ -1,15 +1,15 @@
 #include "hardware.h"
 
-Button::Button(Adafruit_MCP23X17 *mcp, uint8_t pin, Led *led) : _mcp(mcp), _pin(pin), _led(led)
+Button::Button(Expander expander, uint8_t pin, Led *led) : _expander(expander), _pin(pin), _led(led)
 {
-	_mcp->pinMode(_pin, INPUT_PULLUP);
+	_expander->pinMode(_pin, INPUT_PULLUP);
 }
 
 // ----------------------------------------------------------------------------------------------------
 
 DeviceState Button::getState()
 {
-	DeviceState state = !_mcp->digitalRead(_pin) ? Pressed : Released;
+	DeviceState state = !_expander->digitalRead(_pin) ? Pressed : Released;
 
 	if (state == _state)
 		return Idle;
