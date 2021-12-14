@@ -1,13 +1,13 @@
 #include "hardware.h"
 
-Led::Led(Adafruit_MCP23X17 *mcp, int pin) : mcp(mcp), pin(pin)
+Led::Led(Adafruit_MCP23X17 *mcp, uint8_t pin) : _mcp(mcp), _pin(pin)
 {
-	mcp->pinMode(pin, OUTPUT);
+	_mcp->pinMode(_pin, OUTPUT);
 }
 
 // ----------------------------------------------------------------------------------------------------
 
 void Led::set(LedState state)
 {
-	mcp->digitalWrite(pin, state);
+	_mcp->digitalWrite(_pin, state);
 }
