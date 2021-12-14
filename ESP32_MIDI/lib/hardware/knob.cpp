@@ -24,7 +24,7 @@ uint8_t Knob::_readPins() { return _mcp->digitalRead(_pinA) << 1 | _mcp->digital
 
 // ----------------------------------------------------------------------------------------------------
 
-DeviceState Knob::state()
+DeviceState Knob::getState()
 {
 	/*
 	pinState
@@ -45,7 +45,7 @@ DeviceState Knob::state()
 	1	1		0	1
 	*/
 
-	DeviceState rotation = Idle;
+	DeviceState state = Idle;
 
 	_pinState = (_pinState & 0b11) << 2 | _readPins();
 	switch (_pinState)
@@ -54,21 +54,21 @@ DeviceState Knob::state()
 	case 0b0111:
 	case 0b1000:
 	case 0b1110:
-		rotation = RotatedClockwise;
+		state = Clockwise;
 		break;
 	case 0b0010:
 	case 0b0100:
 	case 0b1011:
 	case 0b1101:
-		rotation = RotatedCounterClockwise;
+		state = CounterClockwise;
 		break;
 
 	default:
-		rotation = Idle;
+		// rotation = Idle;
 		break;
 	}
 
-	return (DeviceState)(rotation | _button->state());
+	return (DeviceState)(state | _button->getState());
 }
 
 void Knob::set(LedState state)

@@ -7,7 +7,12 @@ Button::Button(Adafruit_MCP23X17 *mcp, uint8_t pin, Led *led) : _mcp(mcp), _pin(
 
 // ----------------------------------------------------------------------------------------------------
 
-DeviceState Button::state()
+DeviceState Button::getState()
 {
-	return (DeviceState)!_mcp->digitalRead(_pin);
+	DeviceState state = !_mcp->digitalRead(_pin) ? Pressed : Released;
+
+	if (state == _state)
+		return Idle;
+
+	return _state = state;
 }

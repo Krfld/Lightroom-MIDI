@@ -3,6 +3,8 @@
 Led::Led(Adafruit_MCP23X17 *mcp, uint8_t pin) : _mcp(mcp), _pin(pin)
 {
 	_mcp->pinMode(_pin, OUTPUT);
+
+	set(Off);
 }
 
 // ----------------------------------------------------------------------------------------------------
