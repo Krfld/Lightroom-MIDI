@@ -1,6 +1,8 @@
 #include "main.h"
 
-#include "hardware.h"
+// #include "hardware.h"
+
+#include <map>
 
 // Setup MCPs
 // Setup devices
@@ -11,6 +13,19 @@ void setup()
 	Serial.println("Setup");
 
 	// TODO Test map.(at|erase) with invalid key
+
+	std::map<int, int> map;
+
+	try
+	{
+		Serial.println(map.at(0));
+	}
+	catch (const std::exception &e)
+	{
+		Serial.println("Error");
+	}
+
+	// Serial.println(map.erase(1));
 
 	// Devices::addExpander(0, 0x20);
 

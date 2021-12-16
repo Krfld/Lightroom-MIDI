@@ -16,5 +16,12 @@ void Devices::removeExpander(id id) { _expanders.erase(id); }
 
 bool Devices::addLed(led_s led)
 {
-	// Expander expander = _expanders.at(led.expanderId);
+	try
+	{
+		Expander expander = _expanders.at(led.expanderId);
+	}
+	catch (const std::exception &e)
+	{
+		return false;
+	}
 }

@@ -34,14 +34,12 @@ struct expander_s
 struct led_s
 {
 	id expanderId;
-	id id;
 	pin pin;
 };
 
 struct button_s
 {
 	id expanderId;
-	id id;
 	pin pin;
 	led_s led;
 };
@@ -49,7 +47,6 @@ struct button_s
 struct knob_s
 {
 	id expanderId;
-	id id;
 	pin pinA;
 	pin pinB;
 	led_s led;
@@ -130,10 +127,10 @@ private:
 	static std::map<id, Button *> _buttons;
 	static std::map<id, Knob *> _knobs;
 
-public:
 	static bool addExpander(id, uint8_t);
 	static void removeExpander(id);
 
+public:
 	static bool addLed(led_s);
 	static void removeLed(id);
 
