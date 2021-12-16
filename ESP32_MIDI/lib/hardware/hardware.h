@@ -7,6 +7,7 @@
 #include "Adafruit_MCP23X17.h"
 
 typedef uint8_t id;
+typedef uint8_t pin;
 typedef Adafruit_MCP23X17 *Expander;
 
 enum DeviceState : uint8_t
@@ -24,23 +25,48 @@ enum LedState : uint8_t
 	On,
 };
 
-// ----------------------------------------------------------------------------------------------------
+struct expander_s
+{
+	id id;
+	uint8_t address;
+};
 
 struct led_s
 {
 	id expanderId;
-	uint8_t pin;
+	id id;
+	pin pin;
 };
+
+struct button_s
+{
+	id expanderId;
+	id id;
+	pin pin;
+	led_s led;
+};
+
+struct knob_s
+{
+	id expanderId;
+	id id;
+	pin pinA;
+	pin pinB;
+	led_s led;
+	button_s button;
+};
+
+// ----------------------------------------------------------------------------------------------------
 
 class Led
 {
 private:
 	Expander _expander;
-	uint8_t _pin;
+	pin _pin;
 
 public:
-	Led(Expander expander, uint8_t pin);
-	void set(LedState state);
+	Led(Expander, pin);
+	void set(LedState);
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -48,22 +74,22 @@ public:
 struct button_s
 {
 	id expanderId;
-	uint8_t pin;
+	pin pin;
 };
 
 class Button
 {
 private:
 	Expander _expander;
-	uint8_t _pin;
+	pin _pin;
 
 	Led *_led;
 
 	DeviceState _state;
 
 public:
-	Button(Expander expander, uint8_t pin);
-	Button(Expander expander, uint8_t pin, Led *led);
+	Button(Expander, pin);
+	Button(Expander, pin, Led *);
 	DeviceState getState();
 };
 
@@ -73,8 +99,8 @@ class Knob
 {
 private:
 	Expander _expander;
-	uint8_t _pinA;
-	uint8_t _pinB;
+	pin _pinA;
+	pin _pinB;
 
 	Button *_button;
 	Led *_led;
@@ -85,12 +111,12 @@ private:
 	uint8_t _readPins();
 
 public:
-	Knob(Expander expander, uint8_t pinA, uint8_t pinB);
-	Knob(Expander expander, uint8_t pinA, uint8_t pinB, Led *led);
-	Knob(Expander expander, uint8_t pinA, uint8_t pinB, Button *button);
-	Knob(Expander expander, uint8_t pinA, uint8_t pinB, Button *button, Led *led);
+	Knob(Expander, pin pinA, pin pinB);
+	Knob(Expander, pin pinA, pin pinB, Led *);
+	Knob(Expander, pin pinA, pin pinB, Button *);
+	Knob(Expander, pin pinA, pin pinB, Button *, Led *);
 	DeviceState getState();
-	void set(LedState state);
+	void set(LedState);
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -105,16 +131,17 @@ private:
 	static std::map<id, Knob *> _knobs;
 
 public:
-	static bool addExpander(id id, uint8_t address);
-	static void removeExpander(id id);
+	static bool addExpander(id, uint8_t);
+	static void removeExpander(id);
 
-	static bool addLed(id expanderId, uint8_t pin);
+	static bool addLed(led_s);
+	static void removeLed(id);
 
-	//? Maybe use structs
+	static bool addButton(button_s, led_s);
+	static void removeButton(id);
 
-	static bool addButton(id expanderId, uint8_t pin, id ledId);
-
-	static bool addKnob(id expanderId, uint8_t pinA, uint8_t pinB, id buttonId, id ledId);
+	static bool addKnob(knob_s, button_s, led_s);
+	static void removeKnob(id);
 };
 
 #endif // HARDWARE_H

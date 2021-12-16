@@ -10,6 +10,8 @@ void setup()
 	Serial.begin(115200);
 	Serial.println("Setup");
 
+	// TODO Test map.(at|erase) with invalid key
+
 	// Devices::addExpander(0, 0x20);
 
 	// Adafruit_MCP23X17 mcp1;

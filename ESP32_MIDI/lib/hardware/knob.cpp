@@ -1,6 +1,6 @@
 #include "hardware.h"
 
-Knob::Knob(Expander expander, uint8_t pinA, uint8_t pinB, Button *button, Led *led)
+Knob::Knob(Expander expander, pin pinA, pin pinB, Button *button, Led *led)
 	: _expander(expander), _pinA(pinA), _pinB(pinB), _button(button), _led(led)
 {
 	_expander->pinMode(_pinA, INPUT_PULLUP);
@@ -9,13 +9,13 @@ Knob::Knob(Expander expander, uint8_t pinA, uint8_t pinB, Button *button, Led *l
 	_pinState = _readPins();
 }
 
-Knob::Knob(Expander expander, uint8_t pinA, uint8_t pinB, Led *led)
+Knob::Knob(Expander expander, pin pinA, pin pinB, Led *led)
 	: Knob(expander, pinA, pinB, NULL, led) {}
 
-Knob::Knob(Expander expander, uint8_t pinA, uint8_t pinB, Button *button)
+Knob::Knob(Expander expander, pin pinA, pin pinB, Button *button)
 	: Knob(expander, pinA, pinB, button, NULL) {}
 
-Knob::Knob(Expander expander, uint8_t pinA, uint8_t pinB)
+Knob::Knob(Expander expander, pin pinA, pin pinB)
 	: Knob(expander, pinA, pinB, NULL, NULL) {}
 
 // ----------------------------------------------------------------------------------------------------

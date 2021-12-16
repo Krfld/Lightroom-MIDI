@@ -13,3 +13,8 @@ bool Devices::addExpander(id id = 1, uint8_t address = 0x20)
 void Devices::removeExpander(id id) { _expanders.erase(id); }
 
 // ----------------------------------------------------------------------------------------------------
+
+bool Devices::addLed(led_s led)
+{
+	// Expander expander = _expanders.at(led.expanderId);
+}

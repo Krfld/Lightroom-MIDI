@@ -1,6 +1,6 @@
 #include "hardware.h"
 
-Button::Button(Expander expander, uint8_t pin, Led *led) : _expander(expander), _pin(pin), _led(led)
+Button::Button(Expander expander, pin pin, Led *led) : _expander(expander), _pin(pin), _led(led)
 {
 	_expander->pinMode(_pin, INPUT_PULLUP);
 }

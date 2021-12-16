@@ -1,6 +1,6 @@
 #include "hardware.h"
 
-Led::Led(Expander expander, uint8_t pin) : _expander(expander), _pin(pin)
+Led::Led(Expander expander, pin pin) : _expander(expander), _pin(pin)
 {
 	_expander->pinMode(_pin, OUTPUT);
 
