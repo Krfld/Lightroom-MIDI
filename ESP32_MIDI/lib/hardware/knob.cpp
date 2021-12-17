@@ -9,15 +9,6 @@ Knob::Knob(Expander expander, pin pinA, pin pinB, Button *button, Led *led)
 	_pinState = _readPins();
 }
 
-Knob::Knob(Expander expander, pin pinA, pin pinB, Led *led)
-	: Knob(expander, pinA, pinB, NULL, led) {}
-
-Knob::Knob(Expander expander, pin pinA, pin pinB, Button *button)
-	: Knob(expander, pinA, pinB, button, NULL) {}
-
-Knob::Knob(Expander expander, pin pinA, pin pinB)
-	: Knob(expander, pinA, pinB, NULL, NULL) {}
-
 // ----------------------------------------------------------------------------------------------------
 
 uint8_t Knob::_readPins() { return _expander->digitalRead(_pinA) << 1 | _expander->digitalRead(_pinB) << 0; }

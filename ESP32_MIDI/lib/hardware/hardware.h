@@ -41,8 +41,8 @@ struct button_s
 struct knob_s
 {
 	id expanderId;
-	pin pinA;
-	pin pinB;
+	pin A;
+	pin B;
 	led_s led;
 	button_s button;
 };
@@ -73,7 +73,6 @@ private:
 	DeviceState _state;
 
 public:
-	Button(Expander, pin);
 	Button(Expander, pin, Led *);
 	DeviceState getState();
 };
@@ -96,10 +95,7 @@ private:
 	uint8_t _readPins();
 
 public:
-	Knob(Expander, pin pinA, pin pinB);
-	Knob(Expander, pin pinA, pin pinB, Led *);
-	Knob(Expander, pin pinA, pin pinB, Button *);
-	Knob(Expander, pin pinA, pin pinB, Button *, Led *);
+	Knob(Expander, pin A, pin B, Button *, Led *);
 	DeviceState getState();
 	void set(LedState);
 };
@@ -110,23 +106,29 @@ class Devices
 {
 private:
 	Devices();
+
 	static std::map<id, Expander> _expanders;
 	static std::map<id, Led *> _leds;
 	static std::map<id, Button *> _buttons;
 	static std::map<id, Knob *> _knobs;
 
+	// Add all expanders first
 	static bool addExpander(id, uint8_t);
-	static void removeExpander(id);
+	static Expander getExpander(id);
+	static size_t removeExpander(id);
 
 public:
+	static Led *setLed(led_s);
 	static bool addLed(id, led_s);
-	static void removeLed(id);
+	static size_t removeLed(id);
 
-	static bool addButton(id, button_s, led_s);
-	static void removeButton(id);
+	static Button *setButton(button_s);
+	static bool addButton(id, button_s);
+	static size_t removeButton(id);
 
-	static bool addKnob(id, knob_s, button_s, led_s);
-	static void removeKnob(id);
+	static Knob *setKnob(knob_s);
+	static bool addKnob(id, knob_s);
+	static size_t removeKnob(id);
 };
 
 #endif // HARDWARE_H

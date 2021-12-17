@@ -12,17 +12,6 @@ void setup()
 	Serial.begin(115200);
 	Serial.println("Setup");
 
-	std::map<int, int> map;
-
-	try
-	{
-		Serial.println(map.at(0));
-	}
-	catch (const std::exception &e)
-	{
-		Serial.println("Error");
-	}
-
 	// Serial.println(map.erase(1));
 
 	// Devices::addExpander(0, 0x20);
