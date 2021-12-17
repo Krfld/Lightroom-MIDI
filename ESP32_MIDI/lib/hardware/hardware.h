@@ -2,7 +2,6 @@
 #define HARDWARE_H
 
 #include <map>
-#include <Arduino.h>
 
 #include "Adafruit_MCP23X17.h"
 
@@ -56,8 +55,8 @@ private:
 	pin_t _pin;
 
 public:
-	Led(Expander, pin_t);
-	void set(LedState);
+	Led(Expander expander, pin_t pin);
+	void set(LedState state);
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -73,9 +72,9 @@ private:
 	DeviceState _state;
 
 public:
-	Button(Expander, pin_t, Led *);
+	Button(Expander expander, pin_t pin, Led *led);
 	DeviceState getState();
-	void ledSet(LedState);
+	void ledSet(LedState state);
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -96,9 +95,9 @@ private:
 	uint8_t _readPins();
 
 public:
-	Knob(Expander, pin_t A, pin_t B, Button *, Led *);
+	Knob(Expander expander, pin_t A, pin_t B, Button *button, Led *led);
 	DeviceState getState();
-	void ledSet(LedState);
+	void setLed(LedState state);
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -114,25 +113,21 @@ private:
 	static std::map<id_t, Button *> _buttons;
 	static std::map<id_t, Knob *> _knobs;
 
-	static Expander _getExpander(id_t);
-
-	static Led *_setupLed(led_s);
-	static Button *_setupButton(button_s);
-	static Knob *_setupKnob(knob_s);
+	static Expander _getExpander(id_t id);
+	static Led *_setupLed(led_s led);
+	static Button *_setupButton(button_s button);
+	static Knob *_setupKnob(knob_s knob);
 
 public:
-	// Add all expanders first
-	static bool addExpander(id_t, uint8_t);
-	static size_t removeExpander(id_t);
+	static bool addExpander(id_t id, uint8_t address);
+	static bool addLed(id_t id, led_s led);
+	static bool addButton(id_t id, button_s button);
+	static bool addKnob(id_t id, knob_s knob);
 
-	static bool addLed(id_t, led_s);
-	static size_t removeLed(id_t);
-
-	static bool addButton(id_t, button_s);
-	static size_t removeButton(id_t);
-
-	static bool addKnob(id_t, knob_s);
-	static size_t removeKnob(id_t);
+	static bool removeExpander(id_t id);
+	static bool removeLed(id_t id);
+	static bool removeButton(id_t id);
+	static bool removeKnob(id_t id);
 };
 
 #endif // HARDWARE_H

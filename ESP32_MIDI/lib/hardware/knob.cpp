@@ -18,7 +18,8 @@ uint8_t Knob::_readPins() { return _expander->digitalRead(_pinA) << 1 | _expande
 DeviceState Knob::getState()
 {
 	/*
-	pinState
+	Debounce knob
+	_pinState = (old)(old)(new)(new)
 
 	old	old		new	new
 	A	B		A	B
@@ -66,7 +67,7 @@ DeviceState Knob::getState()
 	return (DeviceState)(state | buttonState);
 }
 
-void Knob::ledSet(LedState state)
+void Knob::setLed(LedState state)
 {
 	if (_led != NULL)
 		_led->set(state);
