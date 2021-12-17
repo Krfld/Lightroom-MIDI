@@ -1,8 +1,24 @@
 #include "hardware.h"
 
-bool Devices::addExpander(id id, uint8_t address = 0x20)
+Devices::Devices() {}
+Devices::~Devices() {}
+
+std::map<id_t, Expander> Devices::_expanders;
+std::map<id_t, Led *> Devices::_leds;
+std::map<id_t, Button *> Devices::_buttons;
+std::map<id_t, Knob *> Devices::_knobs;
+
+// ----------------------------------------------------------------------------------------------------
+
+Expander Devices::_getExpander(id_t id)
 {
-	Expander expander = Expander();
+	Expander expander = _expanders[id];
+	return expander != NULL ? expander : NULL;
+}
+
+bool Devices::addExpander(id_t id, uint8_t address)
+{
+	Expander expander = new Adafruit_MCP23X17();
 
 	if (!expander->begin_I2C(address))
 		return false;
@@ -10,62 +26,40 @@ bool Devices::addExpander(id id, uint8_t address = 0x20)
 	return _expanders.insert({id, expander}).second;
 }
 
-Expander Devices::getExpander(id id)
-{
-	try
-	{
-		return _expanders.at(id);
-	}
-	catch (const std::exception &e)
-	{
-		return NULL;
-	}
-}
-
-size_t Devices::removeExpander(id id) { return _expanders.erase(id); }
+size_t Devices::removeExpander(id_t id) { return _expanders.erase(id); }
 
 // ----------------------------------------------------------------------------------------------------
 
-Led *Devices::setLed(led_s led)
+Led *Devices::_setupLed(led_s led)
 {
-	try
-	{
-		Expander expander = getExpander(led.expanderId);
-
-		return &Led(expander, led.pin);
-	}
-	catch (const std::exception &e)
-	{
-		return NULL;
-	}
+	Expander expander = _getExpander(led.expanderId);
+	return expander != NULL ? new Led(expander, led.pin) : NULL;
 }
 
-bool Devices::addLed(id id, led_s led)
-{
-	return _leds.insert({id, setLed(led)}).second;
-}
+bool Devices::addLed(id_t id, led_s led) { return _leds.insert({id, _setupLed(led)}).second; }
 
-size_t Devices::removeLed(id id) { return _leds.erase(id); }
+size_t Devices::removeLed(id_t id) { return _leds.erase(id); }
 
 // ----------------------------------------------------------------------------------------------------
 
-Button *setButton(button_s button)
+Button *Devices::_setupButton(button_s button)
 {
-	try
-	{
-		Expander expander = getExpander(button.expanderId);
-
-		return &Button(expander, button.pin, setLed(button.led));
-	}
-	catch (const std::exception &e)
-	{
-		return NULL;
-	}
+	Expander expander = _getExpander(button.expanderId);
+	return expander != NULL ? new Button(expander, button.pin, _setupLed(button.led)) : NULL;
 }
 
-bool Devices::addButton(id id, button_s button)
+bool Devices::addButton(id_t id, button_s button) { return _buttons.insert({id, _setupButton(button)}).second; }
+
+size_t Devices::removeButton(id_t id) { return _buttons.erase(id); }
+
+// ----------------------------------------------------------------------------------------------------
+
+Knob *Devices::_setupKnob(knob_s knob)
 {
-	return _buttons.insert({id, setButton(button)}).second;
+	Expander expander = _getExpander(knob.expanderId);
+	return expander != NULL ? new Knob(expander, knob.pinA, knob.pinB, _setupButton(knob.button), _setupLed(knob.led)) : NULL;
 }
 
-size_t Devices::removeButton(id id) { return _buttons.erase(id); }
+bool Devices::addKnob(id_t id, knob_s knob) { return _knobs.insert({id, _setupKnob(knob)}).second; }
+
+size_t Devices::removeKnob(id_t id) { return _knobs.erase(id); }

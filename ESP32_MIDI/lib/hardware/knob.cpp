@@ -1,6 +1,6 @@
 #include "hardware.h"
 
-Knob::Knob(Expander expander, pin pinA, pin pinB, Button *button, Led *led)
+Knob::Knob(Expander expander, pin_t pinA, pin_t pinB, Button *button, Led *led)
 	: _expander(expander), _pinA(pinA), _pinB(pinB), _button(button), _led(led)
 {
 	_expander->pinMode(_pinA, INPUT_PULLUP);
@@ -59,10 +59,15 @@ DeviceState Knob::getState()
 		break;
 	}
 
-	return (DeviceState)(state | _button->getState());
+	DeviceState buttonState = Idle;
+	if (_button != NULL)
+		buttonState = _button->getState();
+
+	return (DeviceState)(state | buttonState);
 }
 
-void Knob::set(LedState state)
+void Knob::ledSet(LedState state)
 {
-	_led->set(state);
+	if (_led != NULL)
+		_led->set(state);
 }

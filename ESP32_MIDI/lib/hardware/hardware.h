@@ -6,8 +6,8 @@
 
 #include "Adafruit_MCP23X17.h"
 
-typedef uint8_t id;
-typedef uint8_t pin;
+typedef uint8_t id_t;
+typedef uint8_t pin_t;
 typedef Adafruit_MCP23X17 *Expander;
 
 enum DeviceState : uint8_t
@@ -27,22 +27,22 @@ enum LedState : uint8_t
 
 struct led_s
 {
-	id expanderId;
-	pin pin;
+	id_t expanderId;
+	pin_t pin;
 };
 
 struct button_s
 {
-	id expanderId;
-	pin pin;
+	id_t expanderId;
+	pin_t pin;
 	led_s led;
 };
 
 struct knob_s
 {
-	id expanderId;
-	pin A;
-	pin B;
+	id_t expanderId;
+	pin_t pinA;
+	pin_t pinB;
 	led_s led;
 	button_s button;
 };
@@ -53,10 +53,10 @@ class Led
 {
 private:
 	Expander _expander;
-	pin _pin;
+	pin_t _pin;
 
 public:
-	Led(Expander, pin);
+	Led(Expander, pin_t);
 	void set(LedState);
 };
 
@@ -66,15 +66,16 @@ class Button
 {
 private:
 	Expander _expander;
-	pin _pin;
+	pin_t _pin;
 
 	Led *_led;
 
 	DeviceState _state;
 
 public:
-	Button(Expander, pin, Led *);
+	Button(Expander, pin_t, Led *);
 	DeviceState getState();
+	void ledSet(LedState);
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -83,8 +84,8 @@ class Knob
 {
 private:
 	Expander _expander;
-	pin _pinA;
-	pin _pinB;
+	pin_t _pinA;
+	pin_t _pinB;
 
 	Button *_button;
 	Led *_led;
@@ -95,9 +96,9 @@ private:
 	uint8_t _readPins();
 
 public:
-	Knob(Expander, pin A, pin B, Button *, Led *);
+	Knob(Expander, pin_t A, pin_t B, Button *, Led *);
 	DeviceState getState();
-	void set(LedState);
+	void ledSet(LedState);
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -106,29 +107,32 @@ class Devices
 {
 private:
 	Devices();
+	~Devices();
 
-	static std::map<id, Expander> _expanders;
-	static std::map<id, Led *> _leds;
-	static std::map<id, Button *> _buttons;
-	static std::map<id, Knob *> _knobs;
+	static std::map<id_t, Expander> _expanders;
+	static std::map<id_t, Led *> _leds;
+	static std::map<id_t, Button *> _buttons;
+	static std::map<id_t, Knob *> _knobs;
 
-	// Add all expanders first
-	static bool addExpander(id, uint8_t);
-	static Expander getExpander(id);
-	static size_t removeExpander(id);
+	static Expander _getExpander(id_t);
+
+	static Led *_setupLed(led_s);
+	static Button *_setupButton(button_s);
+	static Knob *_setupKnob(knob_s);
 
 public:
-	static Led *setLed(led_s);
-	static bool addLed(id, led_s);
-	static size_t removeLed(id);
+	// Add all expanders first
+	static bool addExpander(id_t, uint8_t);
+	static size_t removeExpander(id_t);
 
-	static Button *setButton(button_s);
-	static bool addButton(id, button_s);
-	static size_t removeButton(id);
+	static bool addLed(id_t, led_s);
+	static size_t removeLed(id_t);
 
-	static Knob *setKnob(knob_s);
-	static bool addKnob(id, knob_s);
-	static size_t removeKnob(id);
+	static bool addButton(id_t, button_s);
+	static size_t removeButton(id_t);
+
+	static bool addKnob(id_t, knob_s);
+	static size_t removeKnob(id_t);
 };
 
 #endif // HARDWARE_H
