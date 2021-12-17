@@ -25,12 +25,6 @@ enum LedState : uint8_t
 	On,
 };
 
-struct expander_s
-{
-	id id;
-	uint8_t address;
-};
-
 struct led_s
 {
 	id expanderId;
@@ -67,12 +61,6 @@ public:
 };
 
 // ----------------------------------------------------------------------------------------------------
-
-struct button_s
-{
-	id expanderId;
-	pin pin;
-};
 
 class Button
 {
@@ -131,13 +119,13 @@ private:
 	static void removeExpander(id);
 
 public:
-	static bool addLed(led_s);
+	static bool addLed(id, led_s);
 	static void removeLed(id);
 
-	static bool addButton(button_s, led_s);
+	static bool addButton(id, button_s, led_s);
 	static void removeButton(id);
 
-	static bool addKnob(knob_s, button_s, led_s);
+	static bool addKnob(id, knob_s, button_s, led_s);
 	static void removeKnob(id);
 };
 

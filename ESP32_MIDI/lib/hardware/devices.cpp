@@ -1,6 +1,6 @@
 #include "hardware.h"
 
-bool Devices::addExpander(id id = 1, uint8_t address = 0x20)
+bool Devices::addExpander(id id, uint8_t address = 0x20)
 {
 	Expander expander = Expander();
 
@@ -14,7 +14,7 @@ void Devices::removeExpander(id id) { _expanders.erase(id); }
 
 // ----------------------------------------------------------------------------------------------------
 
-bool Devices::addLed(led_s led)
+bool Devices::addLed(id id, led_s led)
 {
 	try
 	{

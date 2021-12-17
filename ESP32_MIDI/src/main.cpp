@@ -12,8 +12,6 @@ void setup()
 	Serial.begin(115200);
 	Serial.println("Setup");
 
-	// TODO Test map.(at|erase) with invalid key
-
 	std::map<int, int> map;
 
 	try
