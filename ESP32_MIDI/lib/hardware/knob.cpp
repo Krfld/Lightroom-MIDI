@@ -37,7 +37,7 @@ DeviceState Knob::getState()
 	1	1		0	1
 	*/
 
-	DeviceState state = Idle;
+	DeviceState turnState = Idle;
 
 	_pinState = (_pinState & 0b11) << 2 | _readPins();
 	switch (_pinState)
@@ -46,13 +46,13 @@ DeviceState Knob::getState()
 	case 0b0111:
 	case 0b1000:
 	case 0b1110:
-		state = Clockwise;
+		turnState = Clockwise;
 		break;
 	case 0b0010:
 	case 0b0100:
 	case 0b1011:
 	case 0b1101:
-		state = CounterClockwise;
+		turnState = CounterClockwise;
 		break;
 
 	default:
@@ -64,7 +64,7 @@ DeviceState Knob::getState()
 	if (_button != NULL)
 		buttonState = _button->getState();
 
-	return (DeviceState)(state | buttonState);
+	return (DeviceState)(turnState | buttonState);
 }
 
 void Knob::setLed(LedState state)
