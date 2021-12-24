@@ -1,30 +1,30 @@
 #include "hardware.h"
 
-std::map<id_t, Expander> Devices::_expanders;
+std::map<id_t, MCP23017 *> Devices::_expanders;
 std::map<id_t, Led *> Devices::_leds;
 std::map<id_t, Button *> Devices::_buttons;
 std::map<id_t, Knob *> Devices::_knobs;
 
 // ----------------------------------------------------------------------------------------------------
 
-Expander Devices::_getExpander(id_t id)
+MCP23017 *Devices::_getExpander(id_t id)
 {
-	Expander expander = _expanders[id];
+	MCP23017 *expander = _expanders[id];
 	return expander != NULL ? expander : NULL;
 }
 Led *Devices::_setupLed(led_s led)
 {
-	Expander expander = _getExpander(led.expanderId);
+	MCP23017 *expander = _getExpander(led.expanderId);
 	return expander != NULL ? new Led(expander, led.pin) : NULL;
 }
 Button *Devices::_setupButton(button_s button)
 {
-	Expander expander = _getExpander(button.expanderId);
+	MCP23017 *expander = _getExpander(button.expanderId);
 	return expander != NULL ? new Button(expander, button.pin, _setupLed(button.led)) : NULL;
 }
 Knob *Devices::_setupKnob(knob_s knob)
 {
-	Expander expander = _getExpander(knob.expanderId);
+	MCP23017 *expander = _getExpander(knob.expanderId);
 	return expander != NULL ? new Knob(expander, knob.pinA, knob.pinB, _setupButton(knob.button), _setupLed(knob.led)) : NULL;
 }
 
@@ -32,7 +32,7 @@ Knob *Devices::_setupKnob(knob_s knob)
 
 bool Devices::addExpander(id_t id, uint8_t address)
 {
-	Expander expander = new Adafruit_MCP23X17();
+	MCP23017 *expander = new MCP23017();
 	if (!expander->begin_I2C(address))
 		return false;
 	return _expanders.insert({id, expander}).second;
