@@ -12,34 +12,51 @@ MCP23017 *Devices::_getExpander(id_t id)
 	MCP23017 *expander = _expanders[id];
 	return expander != NULL ? expander : NULL;
 }
-Led *Devices::_setupLed(led_s led)
+Led *Devices::_setupLed(led_s led_s)
 {
-	MCP23017 *expander = _getExpander(led.expanderId);
-	return expander != NULL ? new Led(expander, led.pin) : NULL;
+	MCP23017 *expander = _getExpander(led_s.expanderId);
+	return expander != NULL ? new Led(expander, led_s.pin) : NULL;
 }
-Button *Devices::_setupButton(button_s button)
+Button *Devices::_setupButton(button_s button_s)
 {
-	MCP23017 *expander = _getExpander(button.expanderId);
-	return expander != NULL ? new Button(expander, button.pin, _setupLed(button.led)) : NULL;
+	MCP23017 *expander = _getExpander(button_s.expanderId);
+	return expander != NULL ? new Button(expander, button_s.pin, _setupLed(button_s.led)) : NULL;
 }
-Knob *Devices::_setupKnob(knob_s knob)
+Knob *Devices::_setupKnob(knob_s knob_s)
 {
-	MCP23017 *expander = _getExpander(knob.expanderId);
-	return expander != NULL ? new Knob(expander, knob.pinA, knob.pinB, _setupButton(knob.button), _setupLed(knob.led)) : NULL;
+	MCP23017 *expander = _getExpander(knob_s.expanderId);
+	return expander != NULL ? new Knob(expander, knob_s.pinA, knob_s.pinB, _setupButton(knob_s.button), _setupLed(knob_s.led)) : NULL;
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-bool Devices::addExpander(id_t id, uint8_t address)
+bool Devices::addExpander(expander_s expander_s)
 {
-	MCP23017 *expander = new MCP23017();
-	if (!expander->begin_I2C(address))
+	if (expander_s.sda < 0 || expander_s.scl < 0)
 		return false;
-	return _expanders.insert({id, expander}).second;
+
+	Wire.setPins(expander_s.sda, expander_s.scl);
+
+	MCP23017 *expander = new MCP23017();
+	if (!expander->begin_I2C(expander_s.address, &Wire))
+		return false;
+	return _expanders.insert({expander_s.id, expander}).second;
 }
-bool Devices::addLed(id_t id, led_s led) { return _leds.insert({id, _setupLed(led)}).second; }
-bool Devices::addButton(id_t id, button_s button) { return _buttons.insert({id, _setupButton(button)}).second; }
-bool Devices::addKnob(id_t id, knob_s knob) { return _knobs.insert({id, _setupKnob(knob)}).second; }
+bool Devices::addLed(led_s led_s)
+{
+	Led *led = _setupLed(led_s);
+	return led != NULL ? _leds.insert({led_s.id, led}).second : false;
+}
+bool Devices::addButton(button_s button_s)
+{
+	Button *button = _setupButton(button_s);
+	return button != NULL ? _buttons.insert({button_s.id, button}).second : false;
+}
+bool Devices::addKnob(knob_s knob_s)
+{
+	Knob *knob = _setupKnob(knob_s);
+	return knob != NULL ? _knobs.insert({knob_s.id, knob}).second : false;
+}
 
 // ----------------------------------------------------------------------------------------------------
 

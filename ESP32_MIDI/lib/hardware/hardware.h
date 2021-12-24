@@ -24,14 +24,24 @@ enum LedState : uint8_t
 	On,
 };
 
+struct expander_s
+{
+	id_t id;
+	pin_t sda;
+	pin_t scl;
+	uint8_t address;
+};
+
 struct led_s
 {
+	id_t id;
 	id_t expanderId;
 	pin_t pin;
 };
 
 struct button_s
 {
+	id_t id;
 	id_t expanderId;
 	pin_t pin;
 	led_s led;
@@ -39,6 +49,7 @@ struct button_s
 
 struct knob_s
 {
+	id_t id;
 	id_t expanderId;
 	pin_t pinA;
 	pin_t pinB;
@@ -109,20 +120,21 @@ private:
 	~Devices();
 
 	static std::map<id_t, MCP23017 *> _expanders;
-	static std::map<id_t, Led *> _leds;
 	static std::map<id_t, Button *> _buttons;
 	static std::map<id_t, Knob *> _knobs;
 
 	static MCP23017 *_getExpander(id_t id);
-	static Led *_setupLed(led_s led);
-	static Button *_setupButton(button_s button);
-	static Knob *_setupKnob(knob_s knob);
+	static Led *_setupLed(led_s led_s);
+	static Button *_setupButton(button_s button_s);
+	static Knob *_setupKnob(knob_s knob_s);
 
 public:
-	static bool addExpander(id_t id, uint8_t address);
-	static bool addLed(id_t id, led_s led);
-	static bool addButton(id_t id, button_s button);
-	static bool addKnob(id_t id, knob_s knob);
+	static std::map<id_t, Led *> _leds; // Testing
+
+	static bool addExpander(expander_s expander_s);
+	static bool addLed(led_s led_s);
+	static bool addButton(button_s button_s);
+	static bool addKnob(knob_s knob_s);
 
 	static bool removeExpander(id_t id);
 	static bool removeLed(id_t id);

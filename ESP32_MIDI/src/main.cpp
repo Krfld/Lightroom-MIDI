@@ -6,13 +6,19 @@ void setup()
 {
 	log_i("Setup");
 
-	Devices::addExpander(0, 0x20);
-	Devices::removeExpander(0);
+	log_i("Expander: %d", Devices::addExpander({0, 22, 21, 0x20}));
+
+	log_i("Led: %d", Devices::addLed({0, 0, 7}));
 
 	log_i("Ready");
 }
 
 void loop()
 {
-	delay(2000);
+	log_i("Led on");
+	Devices::_leds[0]->set(On);
+	delay(500);
+	log_i("Led off");
+	Devices::_leds[0]->set(Off);
+	delay(500);
 }
