@@ -9,6 +9,8 @@ void setup()
 
 	//! Something wrong with i2c
 
+	// TODO Test removing devices to see if 'free' works properly
+
 	Devices::addExpander({0, 19, 18, 0x20});
 
 	Devices::addLed({0, 0, 7});

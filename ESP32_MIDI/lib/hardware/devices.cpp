@@ -1,30 +1,25 @@
 #include "hardware.h"
 
-std::map<id_t, MCP23017 *> Devices::_expanders;
+std::map<id_t, Expander *> Devices::_expanders;
 std::map<id_t, Led *> Devices::_leds;
 std::map<id_t, Button *> Devices::_buttons;
 std::map<id_t, Knob *> Devices::_knobs;
 
 // ----------------------------------------------------------------------------------------------------
 
-MCP23017 *Devices::_getExpander(id_t id)
-{
-	MCP23017 *expander = _expanders[id];
-	return expander != NULL ? expander : NULL;
-}
 Led *Devices::_setupLed(led_s led_s)
 {
-	MCP23017 *expander = _getExpander(led_s.expanderId);
+	Expander *expander = _expanders[led_s.expanderId];
 	return expander != NULL ? new Led(expander, led_s.pin) : NULL;
 }
 Button *Devices::_setupButton(button_s button_s)
 {
-	MCP23017 *expander = _getExpander(button_s.expanderId);
+	Expander *expander = _expanders[button_s.expanderId];
 	return expander != NULL ? new Button(expander, button_s.pin, _setupLed(button_s.led)) : NULL;
 }
 Knob *Devices::_setupKnob(knob_s knob_s)
 {
-	MCP23017 *expander = _getExpander(knob_s.expanderId);
+	Expander *expander = _expanders[knob_s.expanderId];
 	return expander != NULL ? new Knob(expander, knob_s.pinA, knob_s.pinB, _setupButton(knob_s.button), _setupLed(knob_s.led)) : NULL;
 }
 
@@ -37,7 +32,7 @@ bool Devices::addExpander(expander_s expander_s)
 
 	Wire.setPins(expander_s.sda, expander_s.scl);
 
-	MCP23017 *expander = new MCP23017();
+	Expander *expander = new Expander();
 	if (!expander->begin_I2C(expander_s.address, &Wire))
 		return false;
 	return _expanders.insert({expander_s.id, expander}).second;
@@ -60,7 +55,31 @@ bool Devices::addKnob(knob_s knob_s)
 
 // ----------------------------------------------------------------------------------------------------
 
-bool Devices::removeExpander(id_t id) { return _expanders.erase(id) != 0; }
-bool Devices::removeLed(id_t id) { return _leds.erase(id) != 0; }
-bool Devices::removeButton(id_t id) { return _buttons.erase(id) != 0; }
-bool Devices::removeKnob(id_t id) { return _knobs.erase(id) != 0; }
+bool Devices::removeExpander(id_t id)
+{
+	Expander *expander = _expanders[id];
+	if (expander != NULL)
+		free(expander);
+	return _expanders.erase(id) != 0;
+}
+bool Devices::removeLed(id_t id)
+{
+	Led *led = _leds[id];
+	if (led != NULL)
+		free(led);
+	return _leds.erase(id) != 0;
+}
+bool Devices::removeButton(id_t id)
+{
+	Button *button = _buttons[id];
+	if (button != NULL)
+		free(button);
+	return _buttons.erase(id) != 0;
+}
+bool Devices::removeKnob(id_t id)
+{
+	Knob *knob = _knobs[id];
+	if (knob != NULL)
+		free(knob);
+	return _knobs.erase(id) != 0;
+}

@@ -3,11 +3,11 @@
 
 #include <map>
 
-#include "Adafruit_MCP23X17.h"
+#include "Adafruit_MCP23X08.h"
 
 typedef uint8_t id_t;
 typedef uint8_t pin_t;
-typedef Adafruit_MCP23X17 MCP23017;
+typedef Adafruit_MCP23X08 Expander;
 
 enum DeviceState : uint8_t
 {
@@ -62,11 +62,11 @@ struct knob_s
 class Led
 {
 private:
-	MCP23017 *_expander;
+	Expander *_expander;
 	pin_t _pin;
 
 public:
-	Led(MCP23017 *expander, pin_t pin);
+	Led(Expander *expander, pin_t pin);
 	void set(LedState state);
 };
 
@@ -75,7 +75,7 @@ public:
 class Button
 {
 private:
-	MCP23017 *_expander;
+	Expander *_expander;
 	pin_t _pin;
 
 	Led *_led;
@@ -83,7 +83,7 @@ private:
 	DeviceState _state;
 
 public:
-	Button(MCP23017 *expander, pin_t pin, Led *led);
+	Button(Expander *expander, pin_t pin, Led *led);
 	DeviceState getState();
 	void ledSet(LedState state);
 };
@@ -93,7 +93,7 @@ public:
 class Knob
 {
 private:
-	MCP23017 *_expander;
+	Expander *_expander;
 	pin_t _pinA;
 	pin_t _pinB;
 
@@ -106,7 +106,7 @@ private:
 	uint8_t _readPins();
 
 public:
-	Knob(MCP23017 *expander, pin_t A, pin_t B, Button *button, Led *led);
+	Knob(Expander *expander, pin_t A, pin_t B, Button *button, Led *led);
 	DeviceState getState();
 	void setLed(LedState state);
 };
@@ -119,11 +119,10 @@ private:
 	Devices();
 	~Devices();
 
-	static std::map<id_t, MCP23017 *> _expanders;
+	static std::map<id_t, Expander *> _expanders;
 	static std::map<id_t, Button *> _buttons;
 	static std::map<id_t, Knob *> _knobs;
 
-	static MCP23017 *_getExpander(id_t id);
 	static Led *_setupLed(led_s led_s);
 	static Button *_setupButton(button_s button_s);
 	static Knob *_setupKnob(knob_s knob_s);
