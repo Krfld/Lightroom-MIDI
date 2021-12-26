@@ -3,11 +3,11 @@
 
 #include <map>
 
-#include "Adafruit_MCP23X08.h"
+#include "Adafruit_MCP23X17.h"
 
 typedef uint8_t id_t;
 typedef uint8_t pin_t;
-typedef Adafruit_MCP23X08 Expander;
+typedef Adafruit_MCP23X17 Expander;
 
 enum DeviceState : uint8_t
 {
