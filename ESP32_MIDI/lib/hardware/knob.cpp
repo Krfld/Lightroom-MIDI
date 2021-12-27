@@ -15,7 +15,7 @@ uint8_t Knob::_readPins() { return _expander->digitalRead(_pinA) << 1 | _expande
 
 // ----------------------------------------------------------------------------------------------------
 
-DeviceState Knob::getState()
+ReadState Knob::read()
 {
 	/*
 	Debounce knob
@@ -37,7 +37,7 @@ DeviceState Knob::getState()
 	1	1		0	1
 	*/
 
-	DeviceState turnState = Idle;
+	ReadState turnState = Idle;
 
 	_pinState = (_pinState & 0b11) << 2 | _readPins();
 	switch (_pinState)
@@ -60,15 +60,15 @@ DeviceState Knob::getState()
 		break;
 	}
 
-	DeviceState buttonState = Idle;
+	ReadState buttonState = Idle;
 	if (_button != NULL)
-		buttonState = _button->getState();
+		buttonState = _button->read();
 
-	return (DeviceState)(turnState | buttonState);
+	return (ReadState)(turnState | buttonState);
 }
 
-void Knob::setLed(LedState state)
+void Knob::write(WriteState state)
 {
 	if (_led != NULL)
-		_led->set(state);
+		_led->write(state);
 }

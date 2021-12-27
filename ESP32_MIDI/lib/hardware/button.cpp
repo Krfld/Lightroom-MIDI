@@ -7,9 +7,9 @@ Button::Button(Expander *expander, pin_t pin, Led *led) : _expander(expander), _
 
 // ----------------------------------------------------------------------------------------------------
 
-DeviceState Button::getState()
+ReadState Button::read()
 {
-	DeviceState state = !_expander->digitalRead(_pin) ? Pressed : Released;
+	ReadState state = !_expander->digitalRead(_pin) ? Pressed : Released;
 
 	if (state == _state)
 		return Idle;
@@ -17,8 +17,8 @@ DeviceState Button::getState()
 	return _state = state;
 }
 
-void Button::ledSet(LedState state)
+void Button::write(WriteState state)
 {
 	if (_led != NULL)
-		_led->set(state);
+		_led->write(state);
 }

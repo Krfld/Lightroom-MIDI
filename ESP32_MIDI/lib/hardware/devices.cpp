@@ -1,9 +1,9 @@
 #include "hardware.h"
 
-std::map<id_t, Expander *> Devices::_expanders;
-std::map<id_t, Led *> Devices::_leds;
-std::map<id_t, Button *> Devices::_buttons;
-std::map<id_t, Knob *> Devices::_knobs;
+// std::map<id_t, Expander *> Devices::_expanders;
+// std::map<id_t, Led *> Devices::_leds;
+// std::map<id_t, Button *> Devices::_buttons;
+// std::map<id_t, Knob *> Devices::_knobs;
 
 // ----------------------------------------------------------------------------------------------------
 
@@ -82,4 +82,16 @@ bool Devices::removeKnob(id_t id)
 	if (knob != NULL)
 		free(knob);
 	return _knobs.erase(id) != 0;
+}
+
+// ----------------------------------------------------------------------------------------------------
+
+bool Devices::init()
+{
+	// TODO Go throw all devices and init them
+	return false;
+}
+
+void Devices::deinit()
+{
 }
