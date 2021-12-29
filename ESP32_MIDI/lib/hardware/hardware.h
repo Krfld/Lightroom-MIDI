@@ -64,11 +64,11 @@ struct knob_s
 class Led
 {
 private:
-	Expander *_expander = NULL;
+	Expander *_expander;
 	const pin_t _pin;
 
-	QueueHandle_t _queueHandle = NULL;
-	TaskHandle_t _taskHandle = NULL;
+	QueueHandle_t _queueHandle;
+	TaskHandle_t _taskHandle;
 	static void _task(void *pvParameters);
 
 	struct taskParameters_s

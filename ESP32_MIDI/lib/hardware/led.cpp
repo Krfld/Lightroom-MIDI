@@ -18,6 +18,9 @@ void Led::_task(void *pvParameters)
 {
 	Led::taskParameters_s *taskParameters = (Led::taskParameters_s *)pvParameters;
 
+	Serial.print("Task led pin: ");
+	Serial.println(taskParameters->pin);
+
 	WriteState state;
 
 	for (;;)
