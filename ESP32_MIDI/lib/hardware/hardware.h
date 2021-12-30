@@ -2,9 +2,7 @@
 #define HARDWARE_H
 
 #include <map>
-
-// #include "FreeRTOS.h"
-
+#include <Arduino.h>
 #include "Adafruit_MCP23X17.h"
 
 typedef uint8_t id_t;
@@ -22,8 +20,8 @@ enum ReadState : uint8_t
 
 enum WriteState : uint8_t
 {
-	Off,
-	On,
+	Off = LOW,
+	On = HIGH,
 };
 
 struct expander_s
@@ -59,32 +57,30 @@ struct knob_s
 	button_s button;
 };
 
+struct taskParameters_s
+{
+	id_t id;
+	Expander *expander;
+	pin_t pin;
+	QueueHandle_t *queueHandle;
+};
+
 // ----------------------------------------------------------------------------------------------------
 
 class Led
 {
 private:
+	id_t _id;
 	Expander *_expander;
 	const pin_t _pin;
-
 	QueueHandle_t _queueHandle;
 	TaskHandle_t _taskHandle;
+
 	static void _task(void *pvParameters);
 
-	struct taskParameters_s
-	{
-		Expander *expander;
-		pin_t pin;
-		QueueHandle_t queueHandle;
-	};
-
 public:
-	Led(Expander *expander, pin_t pin);
-
-	// pin_t getPin();
-	// Expander *getExpander();
-	// TaskHandle_t getTaskHandle();
-	// QueueHandle_t getQueueHandle();
+	Led(id_t id, Expander *expander, pin_t pin);
+	~Led();
 
 	void write(WriteState value);
 

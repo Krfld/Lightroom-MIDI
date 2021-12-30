@@ -1,31 +1,42 @@
 #include "hardware.h"
 
-Led::Led(Expander *expander, pin_t pin) : _expander(expander), _pin(pin)
+Led::Led(id_t id, Expander *expander, pin_t pin) : _id(id), _expander(expander), _pin(pin), _queueHandle(NULL), _taskHandle(NULL)
 {
-	_expander->pinMode(_pin, OUTPUT);
+	log_i("[Led %d] Constructor", _id);
 
-	write(Off);
+	_expander->pinMode(_pin, OUTPUT);
+	_expander->digitalWrite(_pin, Off);
+
+	if (!(_queueHandle = xQueueCreate(1, sizeof(WriteState))))
+		log_i("{ERROR} [Led %d] xQueueCreate failed\n", _id);
+
+	if (!xTaskCreate(_task,
+					 "Led Task",
+					 configMINIMAL_STACK_SIZE * 2,
+					 new (taskParameters_s){_id, _expander, _pin, &_queueHandle},
+					 1,
+					 &_taskHandle))
+		log_i("{ERROR} [Led %d] xTaskCreate failed\n", _id);
+}
+
+Led::~Led()
+{
+	log_i("[Led %d] Destructor", _id);
+
+	vTaskDelete(_taskHandle);
+	vQueueDelete(_queueHandle);
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-// pin_t Led::getPin() { return _pin; }
-// Expander *Led::getExpander() { return _expander; }
-// TaskHandle_t Led::getTaskHandle() { return _taskHandle; }
-// QueueHandle_t Led::getQueueHandle() { return _queueHandle; }
-
 void Led::_task(void *pvParameters)
 {
-	Led::taskParameters_s *taskParameters = (Led::taskParameters_s *)pvParameters;
+	taskParameters_s *taskParameters = (taskParameters_s *)pvParameters;
 
-	Serial.print("Task led pin: ");
-	Serial.println(taskParameters->pin);
-
-	WriteState state;
-
+	WriteState state = Off;
 	for (;;)
 	{
-		xQueueReceive(taskParameters->queueHandle, &state, portMAX_DELAY);
+		xQueueReceive(*taskParameters->queueHandle, &state, portMAX_DELAY);
 
 		taskParameters->expander->digitalWrite(taskParameters->pin, state);
 	}
@@ -36,67 +47,4 @@ void Led::_task(void *pvParameters)
 // ----------------------------------------------------------------------------------------------------
 
 // void Led::write(WriteState state) { _expander->digitalWrite(_pin, state); }
-void Led::write(WriteState state)
-{
-	if (_queueHandle != NULL)
-		xQueueOverwrite(_queueHandle, &state);
-}
-
-bool Led::init()
-{
-	// Queue
-
-	if (_queueHandle)
-	{
-		Serial.println("{WARNING} Led queue already initialized");
-		return false;
-	}
-
-	_queueHandle = xQueueCreate(1, sizeof(WriteState));
-
-	if (!_queueHandle)
-	{
-		Serial.println("{WARNING} Led queue create failed");
-		return false;
-	}
-
-	// Task
-
-	if (_taskHandle)
-	{
-		Serial.println("{WARNING} Led task already initialized");
-		return false;
-	}
-
-	if (!xTaskCreate(_task,
-					 "Led",
-					 configMINIMAL_STACK_SIZE,
-					 new (Led::taskParameters_s){_expander, _pin, _queueHandle},
-					 1,
-					 &_taskHandle))
-	{
-		Serial.println("{WARNING} Led task create failed");
-		vQueueDelete(_queueHandle);
-		_queueHandle = NULL;
-		return false;
-	}
-
-	return true;
-}
-
-void Led::deinit()
-{
-	if (_taskHandle)
-	{
-		vTaskDelete(_taskHandle);
-		_taskHandle = NULL;
-	}
-
-	//? Might need to guarantee that task is deleted before queue
-
-	if (_queueHandle)
-	{
-		vQueueDelete(_queueHandle);
-		_queueHandle = NULL;
-	}
-}
+void Led::write(WriteState state) { xQueueOverwrite(_queueHandle, &state); }

@@ -2,41 +2,34 @@
 
 #include "hardware.h"
 
+//! Something wrong with expander
+
 Devices devices;
 
 void setup()
 {
-	Serial.begin(115200);
-	Serial.println("Setup");
-
-	//! Something wrong with i2c
+	log_i("Setup");
 
 	// TODO Test removing devices to see if 'free' works properly
 
-	if (devices.addExpander({1, 19, 18, 0x20}))
+	if (devices.addExpander({0, 19, 18, 0x20}))
 	{
-		Serial.println("Expander 1 added");
-		if (devices.addLed({1, 1, 7}))
-		{
-			Serial.println("Led 1 added");
-			if (devices._leds[1]->init())
-			{
-				Serial.println("Led 1 init");
-
-				Serial.println("Led on");
-				devices._leds[1]->write(On);
-				delay(3000);
-				Serial.println("Led off");
-				devices._leds[1]->write(Off);
-				delay(3000);
-			}
-		}
+		log_i("Expander added");
+		devices.addLed({0, 0, 7});
 	}
 
-	Serial.println(esp_get_free_heap_size());
-	Serial.println("Ready");
+	log_i("Ready");
 }
 
 void loop()
 {
+	if (devices._leds[0])
+	{
+		log_i("Led %d", On);
+		devices._leds[0]->write(On);
+		delay(500);
+		log_i("Led %d", Off);
+		devices._leds[0]->write(Off);
+		delay(500);
+	}
 }
