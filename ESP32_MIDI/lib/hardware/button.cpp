@@ -19,6 +19,6 @@ ReadState Button::read()
 
 void Button::write(WriteState state)
 {
-	if (_led != NULL)
+	if (_led)
 		_led->write(state);
 }

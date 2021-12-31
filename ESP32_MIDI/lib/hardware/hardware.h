@@ -7,7 +7,7 @@
 
 typedef uint8_t id_t;
 typedef uint8_t pin_t;
-typedef Adafruit_MCP23X17 Expander; // TODO Change to MCP23008
+typedef Adafruit_MCP23X17 Expander;
 
 enum ReadState : uint8_t
 {
@@ -73,6 +73,7 @@ private:
 	id_t _id;
 	Expander *_expander;
 	const pin_t _pin;
+
 	QueueHandle_t _queueHandle;
 	TaskHandle_t _taskHandle;
 
@@ -80,12 +81,9 @@ private:
 
 public:
 	Led(id_t id, Expander *expander, pin_t pin);
-	~Led();
+	// ~Led();
 
 	void write(WriteState value);
-
-	bool init();
-	void deinit();
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -137,6 +135,7 @@ private:
 	std::map<id_t, Button *> _buttons;
 	std::map<id_t, Knob *> _knobs;
 
+	Expander *_setupExpander(expander_s expander_s);
 	Led *_setupLed(led_s led_s);
 	Button *_setupButton(button_s button_s);
 	Knob *_setupKnob(knob_s knob_s);

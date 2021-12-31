@@ -8,24 +8,19 @@ Led::Led(id_t id, Expander *expander, pin_t pin) : _id(id), _expander(expander),
 	_expander->digitalWrite(_pin, Off);
 
 	if (!(_queueHandle = xQueueCreate(1, sizeof(WriteState))))
-		log_i("{ERROR} [Led %d] xQueueCreate failed\n", _id);
+		log_i("{ERROR} [Led %d] xQueueCreate failed", _id);
 
-	if (!xTaskCreate(_task,
-					 "Led Task",
-					 configMINIMAL_STACK_SIZE * 2,
-					 new (taskParameters_s){_id, _expander, _pin, &_queueHandle},
-					 1,
-					 &_taskHandle))
-		log_i("{ERROR} [Led %d] xTaskCreate failed\n", _id);
+	if (!xTaskCreate(_task, "Led Task", configMINIMAL_STACK_SIZE * 3, new (taskParameters_s){_id, _expander, _pin, &_queueHandle}, 1, &_taskHandle))
+		log_i("{ERROR} [Led %d] xTaskCreate failed", _id);
 }
 
-Led::~Led()
-{
-	log_i("[Led %d] Destructor", _id);
+// Led::~Led()
+// {
+// 	log_i("[Led %d] Destructor", _id);
 
-	vTaskDelete(_taskHandle);
-	vQueueDelete(_queueHandle);
-}
+// 	vTaskDelete(_taskHandle);
+// 	vQueueDelete(_queueHandle);
+// }
 
 // ----------------------------------------------------------------------------------------------------
 

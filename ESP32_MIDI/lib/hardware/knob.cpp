@@ -61,7 +61,7 @@ ReadState Knob::read()
 	}
 
 	ReadState buttonState = Idle;
-	if (_button != NULL)
+	if (_button)
 		buttonState = _button->read();
 
 	return (ReadState)(turnState | buttonState);
@@ -69,6 +69,6 @@ ReadState Knob::read()
 
 void Knob::write(WriteState state)
 {
-	if (_led != NULL)
+	if (_led)
 		_led->write(state);
 }

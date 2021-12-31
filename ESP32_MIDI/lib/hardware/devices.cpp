@@ -7,11 +7,21 @@
 
 // ----------------------------------------------------------------------------------------------------
 
+Expander *Devices::_setupExpander(expander_s expander_s)
+{
+	if (expander_s.sda < 0 || expander_s.scl < 0)
+		return NULL;
+
+	Wire.setPins(expander_s.sda, expander_s.scl);
+	// Wire.setClock(I2C_FREQUENCY);
+
+	Expander *expander = new Expander();
+	return expander->begin_I2C(expander_s.address, &Wire) ? expander : NULL;
+}
 Led *Devices::_setupLed(led_s led_s)
 {
 	Expander *expander = _expanders[led_s.expanderId];
 	return expander ? new Led(led_s.id, expander, led_s.pin) : NULL;
-	// return new Led(led_s.id, expander, led_s.pin); //!
 }
 Button *Devices::_setupButton(button_s button_s)
 {
@@ -28,31 +38,30 @@ Knob *Devices::_setupKnob(knob_s knob_s)
 
 bool Devices::addExpander(expander_s expander_s)
 {
-	if (expander_s.sda < 0 || expander_s.scl < 0)
-		return false;
-
-	Wire.setPins(expander_s.sda, expander_s.scl);
-
-	Expander *expander = new Expander();
-	if (!expander->begin_I2C(expander_s.address, &Wire))
-		return false;
-
-	expander->writeGPIOAB(0);
-	return _expanders.insert({expander_s.id, expander}).second;
+	Expander *expander = _setupExpander(expander_s);
+	if (!expander)
+		log_i("[Expander %d] setup failed", expander_s.id);
+	return expander ? _expanders.insert({expander_s.id, expander}).second : false;
 }
 bool Devices::addLed(led_s led_s)
 {
 	Led *led = _setupLed(led_s);
+	if (!led)
+		log_i("[Led %d] setup failed", led_s.id);
 	return led ? _leds.insert({led_s.id, led}).second : false;
 }
 bool Devices::addButton(button_s button_s)
 {
 	Button *button = _setupButton(button_s);
+	if (!button)
+		log_i("[Button %d] setup failed", button_s.id);
 	return button ? _buttons.insert({button_s.id, button}).second : false;
 }
 bool Devices::addKnob(knob_s knob_s)
 {
 	Knob *knob = _setupKnob(knob_s);
+	if (!knob)
+		log_i("[Knob %d] setup failed", knob_s.id);
 	return knob ? _knobs.insert({knob_s.id, knob}).second : false;
 }
 
