@@ -1,9 +1,8 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <Arduino.h>
-
-// #include "esp32-hal.h"
+#include <esp32-hal.h>
+// #include <Arduino.h>
 
 // #include <map>
 

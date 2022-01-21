@@ -11,7 +11,7 @@ typedef Adafruit_MCP23X17 Expander;
 
 enum ReadState : uint8_t
 {
-	Idle = 0,
+	Idle = 0b00,
 	Released = 0b10,
 	Pressed = 0b01,
 	Clockwise = 0b01 << 2,
@@ -69,10 +69,10 @@ struct taskParameters_s
 
 class Led
 {
-private:
+protected:
 	id_t _id;
 	Expander *_expander;
-	const pin_t _pin;
+	pin_t _pin;
 
 	QueueHandle_t _queueHandle;
 	TaskHandle_t _taskHandle;
@@ -81,26 +81,32 @@ private:
 
 public:
 	Led(id_t id, Expander *expander, pin_t pin);
-	// ~Led();
 
 	void write(WriteState value);
 };
 
 // ----------------------------------------------------------------------------------------------------
 
-class Button
+class DefaultButton
 {
-private:
+protected:
 	Expander *_expander;
-	const pin_t _pin;
-
-	Led *_led;
+	pin_t _pin;
 
 	ReadState _state;
 
 public:
-	Button(Expander *expander, pin_t pin, Led *led);
+	DefaultButton(Expander *expander, pin_t pin);
 	ReadState read();
+};
+
+class Button : public DefaultButton
+{
+protected:
+	Led *_led;
+
+public:
+	Button(Expander *expander, pin_t pin, Led *led);
 	void write(WriteState state);
 };
 
@@ -108,10 +114,10 @@ public:
 
 class Knob
 {
-private:
+protected:
 	Expander *_expander;
-	const pin_t _pinA;
-	const pin_t _pinB;
+	pin_t _pinA;
+	pin_t _pinB;
 
 	Button *_button;
 	Led *_led;
@@ -130,7 +136,7 @@ public:
 
 class Devices
 {
-private:
+protected:
 	std::map<id_t, Expander *> _expanders;
 	std::map<id_t, Button *> _buttons;
 	std::map<id_t, Knob *> _knobs;
