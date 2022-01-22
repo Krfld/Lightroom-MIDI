@@ -1,6 +1,6 @@
 #include "hardware.h"
 
-Knob::Knob(Expander *expander, pin_t pinA, pin_t pinB, Button *button, Led *led)
+Knob::Knob(Expander *expander, pin_t pinA, pin_t pinB, DefaultButton *button, Led *led)
 	: _expander(expander), _pinA(pinA), _pinB(pinB), _button(button), _led(led)
 {
 	_expander->pinMode(_pinA, INPUT_PULLUP);

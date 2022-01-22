@@ -31,22 +31,23 @@ struct expander_s
 	pin_t scl;
 	uint8_t address;
 };
-
 struct led_s
 {
 	id_t id;
 	id_t expanderId;
 	pin_t pin;
 };
-
+struct defaultButton_s
+{
+	id_t expanderId;
+	pin_t pin;
+};
 struct button_s
 {
 	id_t id;
-	id_t expanderId;
-	pin_t pin;
+	defaultButton_s defaultButton;
 	led_s led;
 };
-
 struct knob_s
 {
 	id_t id;
@@ -54,16 +55,16 @@ struct knob_s
 	pin_t pinA;
 	pin_t pinB;
 	led_s led;
-	button_s button;
+	defaultButton_s defaultButton;
 };
 
-struct taskParameters_s
-{
-	id_t id;
-	Expander *expander;
-	pin_t pin;
-	QueueHandle_t *queueHandle;
-};
+// struct taskParameters_s
+// {
+// 	id_t id;
+// 	Expander *expander;
+// 	pin_t pin;
+// 	QueueHandle_t *queueHandle;
+// };
 
 // ----------------------------------------------------------------------------------------------------
 
@@ -73,11 +74,6 @@ protected:
 	id_t _id;
 	Expander *_expander;
 	pin_t _pin;
-
-	QueueHandle_t _queueHandle;
-	TaskHandle_t _taskHandle;
-
-	static void _task(void *pvParameters);
 
 public:
 	Led(id_t id, Expander *expander, pin_t pin);
@@ -119,7 +115,7 @@ protected:
 	pin_t _pinA;
 	pin_t _pinB;
 
-	Button *_button;
+	DefaultButton *_button;
 	Led *_led;
 
 	uint8_t _pinState;
@@ -127,7 +123,7 @@ protected:
 	uint8_t _readPins();
 
 public:
-	Knob(Expander *expander, pin_t pinA, pin_t pinB, Button *button, Led *led);
+	Knob(Expander *expander, pin_t pinA, pin_t pinB, DefaultButton *button, Led *led);
 	ReadState read();
 	void write(WriteState state);
 };
@@ -143,6 +139,7 @@ protected:
 
 	Expander *_setupExpander(expander_s expander_s);
 	Led *_setupLed(led_s led_s);
+	DefaultButton *_setupDefaultButton(defaultButton_s defaultButton_s);
 	Button *_setupButton(button_s button_s);
 	Knob *_setupKnob(knob_s knob_s);
 

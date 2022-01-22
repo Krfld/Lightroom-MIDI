@@ -23,15 +23,20 @@ Led *Devices::_setupLed(led_s led_s)
 	Expander *expander = _expanders[led_s.expanderId];
 	return expander ? new Led(led_s.id, expander, led_s.pin) : NULL;
 }
+DefaultButton *Devices::_setupDefaultButton(defaultButton_s defaultButton_s)
+{
+	Expander *expander = _expanders[defaultButton_s.expanderId];
+	return expander ? new DefaultButton(expander, defaultButton_s.pin) : NULL;
+}
 Button *Devices::_setupButton(button_s button_s)
 {
-	Expander *expander = _expanders[button_s.expanderId];
-	return expander ? new Button(expander, button_s.pin, _setupLed(button_s.led)) : NULL;
+	Expander *expander = _expanders[button_s.defaultButton.expanderId];
+	return expander ? new Button(expander, button_s.defaultButton.pin, _setupLed(button_s.led)) : NULL;
 }
 Knob *Devices::_setupKnob(knob_s knob_s)
 {
 	Expander *expander = _expanders[knob_s.expanderId];
-	return expander ? new Knob(expander, knob_s.pinA, knob_s.pinB, _setupButton(knob_s.button), _setupLed(knob_s.led)) : NULL;
+	return expander ? new Knob(expander, knob_s.pinA, knob_s.pinB, _setupDefaultButton(knob_s.defaultButton), _setupLed(knob_s.led)) : NULL;
 }
 
 // ----------------------------------------------------------------------------------------------------
@@ -100,7 +105,7 @@ bool Devices::removeKnob(id_t id)
 
 bool Devices::init()
 {
-	// TODO Go throw all devices and init them
+	// TODO init tasks to read pins
 	return false;
 }
 
