@@ -1,42 +1,64 @@
 #include <Arduino.h>
+#include <esp32-hal.h>
 
-void task(void *args);
+#define LED 2
 
-int x = false;
-QueueHandle_t queue;
+class QueueTask
+{
+protected:
+	QueueHandle_t queue;
+
+	static void task(void *pvParameters);
+
+public:
+	QueueTask()
+	{
+		queue = xQueueCreate(1, sizeof(int));
+		xTaskCreate(task, "task", configMINIMAL_STACK_SIZE * 3, &queue, 1, NULL);
+	}
+	~QueueTask()
+	{
+		log_i("Destructor");
+	}
+
+	void send(int value)
+	{
+		xQueueOverwrite(queue, &value);
+	}
+};
+
+void QueueTask::task(void *pvParameters)
+{
+	QueueHandle_t queue = *(QueueHandle_t *)pvParameters;
+	int value = 0;
+
+	log_i("Task %d", pvParameters);
+	for (;;)
+	{
+		xQueueReceive(queue, &value, portMAX_DELAY);
+		// log_i("Write: %d", value);
+		digitalWrite(LED, value);
+	}
+
+	// vTaskDelete(NULL);
+};
+
+QueueTask queueTask;
 
 void setup()
 {
-	Serial.begin(115200);
-	Serial.println("Setup");
+	log_i("Setup");
 
-	pinMode(13, OUTPUT);
+	pinMode(LED, OUTPUT);
 
-	queue = xQueueCreate(1, sizeof(int));
-
-	xTaskCreate(task, "task", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
-
-	Serial.println("Ready");
+	log_i("Ready");
 }
+
+int x = 0;
 
 void loop()
 {
 	delay(100);
-	xQueueSend(queue, &x, portMAX_DELAY);
 	x = 1 - x;
-}
-
-void task(void *args)
-{
-	int value;
-
-	for (;;)
-	{
-		xQueueReceive(queue, &value, portMAX_DELAY);
-		Serial.print("Led: ");
-		Serial.println(value);
-		digitalWrite(13, value);
-	}
-
-	vTaskDelete(NULL);
+	queueTask.send(x);
 }
