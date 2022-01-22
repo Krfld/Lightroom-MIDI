@@ -56,7 +56,7 @@ ReadState Knob::read()
 		break;
 
 	default:
-		// rotation = Idle;
+		turnState = Idle;
 		break;
 	}
 

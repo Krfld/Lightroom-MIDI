@@ -1,17 +1,12 @@
 #include "hardware.h"
 
-DefaultButton::DefaultButton(Expander *expander, pin_t pin)
+DefaultButton::DefaultButton(Expander *expander, pin_t pin) : _expander(expander), _pin(pin), _state(Idle)
 {
-	_expander = expander;
-	_pin = pin;
-
 	_expander->pinMode(_pin, INPUT_PULLUP);
 }
 
-Button::Button(Expander *expander, pin_t pin, Led *led) : DefaultButton(expander, pin)
+Button::Button(Expander *expander, pin_t pin, Led *led) : DefaultButton(expander, pin), _led(led)
 {
-	_led = led;
-
 	// Init queue and task
 }
 
@@ -20,11 +15,7 @@ Button::Button(Expander *expander, pin_t pin, Led *led) : DefaultButton(expander
 ReadState DefaultButton::read()
 {
 	ReadState state = !_expander->digitalRead(_pin) ? Pressed : Released;
-
-	if (state == _state)
-		return Idle;
-
-	return _state = state;
+	return state == _state ? Idle : _state = state;
 }
 
 void Button::write(WriteState state)
