@@ -21,7 +21,7 @@ Expander *Devices::_setupExpander(expander_s expander_s)
 Led *Devices::_setupLed(led_s led_s)
 {
 	Expander *expander = _expanders[led_s.expanderId];
-	return expander ? new Led(led_s.id, expander, led_s.pin) : NULL;
+	return expander ? new Led(expander, led_s.pin) : NULL;
 }
 DefaultButton *Devices::_setupDefaultButton(defaultButton_s defaultButton_s)
 {

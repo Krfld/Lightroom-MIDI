@@ -7,6 +7,7 @@
 
 typedef uint8_t id_t;
 typedef uint8_t pin_t;
+typedef uint8_t bits_t;
 typedef Adafruit_MCP23X17 Expander;
 
 enum ReadState : uint8_t
@@ -70,24 +71,65 @@ struct knob_s
 
 class QueueTask
 {
-protected:
+private:
+	size_t QUEUE_SIZE = 1;
 	QueueHandle_t _queue;
-	// TaskHandle_t _task;
+
+	size_t TASK_STACK_SIZE = 3;
+	static void _task(void *pvParameters);
+	const void (*_function)(ReadState state);
 
 public:
+	QueueTask(const void (*function)(ReadState state));
+	~QueueTask();
+
+	void sendQueue(ReadState state);
 };
 
+class GenericButton
+{
+private:
+	Expander *_expander;
+	pin_t _pin;
+
+	bits_t _state;
+	bits_t _readState();
+
+public:
+	GenericButton(Expander *expander, pin_t pin);
+	~GenericButton();
+
+	ReadState readButton();
+};
+
+class GenericKnob
+{
+private:
+	Expander *_expander;
+	pin_t _pinA;
+	pin_t _pinB;
+
+	bits_t _state;
+	bits_t _readState();
+
+public:
+	GenericKnob(Expander *expander, pin_t pinA, pin_t pinB);
+	~GenericKnob();
+
+	ReadState readKnob();
+};
+
+// ----------------------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
 class Led
 {
-protected:
-	id_t _id;
+private:
 	Expander *_expander;
 	pin_t _pin;
 
 public:
-	Led(id_t id, Expander *expander, pin_t pin);
+	Led(Expander *expander, pin_t pin);
 
 	void write(WriteState value);
 };
@@ -96,7 +138,7 @@ public:
 
 class DefaultButton
 {
-protected:
+private:
 	Expander *_expander;
 	pin_t _pin;
 
@@ -109,7 +151,7 @@ public:
 
 class Button : public DefaultButton
 {
-protected:
+private:
 	Led *_led;
 
 public:
@@ -121,7 +163,7 @@ public:
 
 class Knob
 {
-protected:
+private:
 	Expander *_expander;
 	pin_t _pinA;
 	pin_t _pinB;
@@ -143,7 +185,7 @@ public:
 
 class Devices
 {
-protected:
+private:
 	std::map<id_t, Expander *> _expanders;
 	std::map<id_t, Button *> _buttons;
 	std::map<id_t, Knob *> _knobs;

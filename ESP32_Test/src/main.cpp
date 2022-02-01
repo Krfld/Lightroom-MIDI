@@ -7,8 +7,8 @@ class QueueTask
 {
 protected:
 	QueueHandle_t queue;
-
 	static void task(void *pvParameters);
+
 
 public:
 	QueueTask()
