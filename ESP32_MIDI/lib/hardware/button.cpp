@@ -3,9 +3,6 @@
 GenericButton::GenericButton(Expander *expander, pin_t pin) : _expander(expander), _pin(pin)
 {
 	_expander->pinMode(_pin, INPUT_PULLUP);
-
-	_expander->digitalWrite(_pin, Off);
-
 	_state = _readState();
 }
 
@@ -19,10 +16,12 @@ ReadState GenericButton::readButton()
 	_state = _readState();
 	return oldState == _state ? Idle : (_state ? Pressed : Released);
 }
+// ----------------------------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
+/*
 DefaultButton::DefaultButton(Expander *expander, pin_t pin) : _expander(expander), _pin(pin), _state(Idle)
 {
 	_expander->pinMode(_pin, INPUT_PULLUP);
@@ -46,3 +45,4 @@ void Button::write(WriteState state)
 	if (_led)
 		_led->write(state);
 }
+*/

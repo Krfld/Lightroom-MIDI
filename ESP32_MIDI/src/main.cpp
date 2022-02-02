@@ -20,6 +20,8 @@ void setup()
 		log_i("Error");
 	}
 
+	devices.addButton({0, 0, 0});
+
 	log_i("%d", x.size());
 
 	// devices.addExpander({0, 19, 18, 0x20});
