@@ -20,7 +20,7 @@ void Function::_task(void *pvParameters)
 	{
 		xQueueReceive(function->_queue, &state, portMAX_DELAY);
 
-		function->_function(state); //! Check if error (private function)
+		function->_function(state);
 
 		//? Maybe delay
 	}

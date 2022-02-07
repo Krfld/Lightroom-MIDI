@@ -1,12 +1,5 @@
 #include "hardware.h"
 
-// std::map<id_t, Expander *> Devices::_expanders;
-// std::map<id_t, Led *> Devices::_leds;
-// std::map<id_t, Button *> Devices::_buttons;
-// std::map<id_t, Knob *> Devices::_knobs;
-
-// ----------------------------------------------------------------------------------------------------
-
 Expander *Devices::_getExpander(id_t id)
 {
 	return _expanders[id];
@@ -135,7 +128,7 @@ void Devices::_knobsTask(void *pvParameters)
 {
 	Devices *devices = (Devices *)pvParameters;
 
-	// TickType_t ticks = xTaskGetTickCount();
+	TickType_t ticks = xTaskGetTickCount();
 	for (;;)
 	{
 		for (const std::pair<const id_t, Knob *> &knob : devices->_knobs)
@@ -145,7 +138,7 @@ void Devices::_knobsTask(void *pvParameters)
 				knob.second->sendFunction(state);
 		}
 
-		//? Delay
+		vTaskDelayUntil(&ticks, pdMS_TO_TICKS(1)); //? Delay
 	}
 
 	vTaskDelete(NULL);

@@ -2,8 +2,6 @@
 #define HARDWARE_H
 
 #include <map>
-#include <Arduino.h>
-#include "freertos/FreeRTOS.h"
 #include "Adafruit_MCP23X17.h"
 
 enum ReadState
@@ -14,18 +12,17 @@ enum ReadState
 	Clockwise = 0b01 << 2,
 	CounterClockwise = 0b10 << 2,
 };
-
-typedef uint8_t id_t;
-typedef uint8_t pin_t;
-typedef uint8_t bits_t;
-typedef Adafruit_MCP23X17 Expander;
-typedef void (*function_t)(ReadState); // TODO Check if typedef works
-
 enum WriteState
 {
 	Off = LOW,
 	On = HIGH,
 };
+
+typedef uint8_t id_t;
+typedef uint8_t pin_t;
+typedef uint8_t bits_t;
+typedef Adafruit_MCP23X17 Expander;
+typedef void (*function_t)(ReadState);
 
 struct defaultExpander_s
 {
@@ -167,61 +164,10 @@ public:
 	void writeLed(WriteState state);
 };
 
-// ----------------------------------------------------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------
-
-/*
-class DefaultButton
-{
-private:
-	Expander *_expander;
-	pin_t _pin;
-
-	ReadState _state;
-
-public:
-	DefaultButton(Expander *expander, pin_t pin);
-	ReadState read();
-};
-
-class Button : public DefaultButton
-{
-private:
-	Led *_led;
-
-public:
-	Button(Expander *expander, pin_t pin, Led *led);
-	void write(WriteState state);
-};
-
-// ----------------------------------------------------------------------------------------------------
-
-class Knob
-{
-private:
-	Expander *_expander;
-	pin_t _pinA;
-	pin_t _pinB;
-
-	DefaultButton *_button;
-	Led *_led;
-
-	uint8_t _pinState;
-
-	uint8_t _readPins();
-
-public:
-	Knob(Expander *expander, pin_t pinA, pin_t pinB, DefaultButton *button, Led *led);
-	ReadState read();
-	void write(WriteState state);
-};
-*/
-
-// ----------------------------------------------------------------------------------------------------
-
 class Devices
 {
 private:
+	size_t I2C_FREQUENCY = 1.7e6;
 	size_t TASKS_STACK_SIZE = 3;
 	size_t DEBOUNCE_MS = 20;
 

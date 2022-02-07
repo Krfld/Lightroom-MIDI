@@ -1,16 +1,39 @@
 #include "main.h"
 
-#include <map>
-#include "hardware.h"
-
 Devices devices;
+
+void f(ReadState state)
+{
+	switch (state)
+	{
+	case Idle:
+		log_i("State: Idle");
+		break;
+	case Pressed:
+		log_i("State: Pressed");
+		break;
+	case Released:
+		log_i("State: Released");
+		break;
+	case Clockwise:
+		log_i("State: Clockwise");
+		break;
+	case CounterClockwise:
+		log_i("State: CounterClockwise");
+		break;
+	}
+}
+
+//! Semaphore between each read and write operation (create expander class to override digital read/write)
 
 void setup()
 {
 	log_i("Setup");
 
-	uint8_t a = -1;
-	log_i("-1: %d", a);
+	devices.addExpander((expander_s){0, (defaultExpander_s){19, 18, 0x20}});
+	devices.addKnob((knob_s){0, (defaultKnob_s){0, 0, 1}, (defaultButton_s){0, 2}, f});
+
+	devices.init();
 
 	log_i("Ready");
 }

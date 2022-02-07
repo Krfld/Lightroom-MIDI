@@ -1,11 +1,8 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#include <map>
 #include <esp32-hal.h>
-// #include <Arduino.h>
-
-// #include <map>
-
-// using namespace std;
+#include "hardware.h"
 
 #endif // MAIN_H
