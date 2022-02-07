@@ -102,8 +102,6 @@ bool Devices::init()
 	return error;
 }
 
-void Devices::deinit() { log_i("~Devices"); }
-
 void Devices::_buttonsTask(void *pvParameters)
 {
 	Devices *devices = (Devices *)pvParameters;

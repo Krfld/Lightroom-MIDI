@@ -245,7 +245,6 @@ public:
 	bool removeKnob(id_t id);
 
 	bool init();
-	void deinit();
 };
 
 #endif // HARDWARE_H
