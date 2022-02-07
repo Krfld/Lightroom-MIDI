@@ -71,80 +71,8 @@ Knob::Knob(Expander *expander, pin_t pinA, pin_t pinB,
 
 Knob::~Knob() { log_i("~Knob"); }
 
-// ----------------------------------------------------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------
-
-/*
-Knob::Knob(Expander *expander, pin_t pinA, pin_t pinB, DefaultButton *button, Led *led)
-	: _expander(expander), _pinA(pinA), _pinB(pinB), _button(button), _led(led)
-{
-	_expander->pinMode(_pinA, INPUT_PULLUP);
-	_expander->pinMode(_pinB, INPUT_PULLUP);
-
-	_pinState = _readPins();
-}
-
-// ----------------------------------------------------------------------------------------------------
-
-uint8_t Knob::_readPins() { return _expander->digitalRead(_pinA) << 1 | _expander->digitalRead(_pinB) << 0; }
-
-// ----------------------------------------------------------------------------------------------------
-
-ReadState Knob::read()
-{
-	/*
-	Debounce knob
-	_pinState = (old)(old)(new)(new)
-
-	old	old		new	new
-	A	B		A	B
-
-	Clockwise
-	0	0		0	1
-	0	1		1	1
-	1	0		0	0
-	1	1		1	0
-
-	CounterClockwise
-	0	0		1	0
-	0	1		0	0
-	1	0		1	1
-	1	1		0	1
-	*
-
-	ReadState turnState = Idle;
-
-	_pinState = (_pinState & 0b11) << 2 | _readPins();
-	switch (_pinState)
-	{
-	case 0b0001:
-	case 0b0111:
-	case 0b1000:
-	case 0b1110:
-		turnState = Clockwise;
-		break;
-	case 0b0010:
-	case 0b0100:
-	case 0b1011:
-	case 0b1101:
-		turnState = CounterClockwise;
-		break;
-
-	default:
-		turnState = Idle;
-		break;
-	}
-
-	ReadState buttonState = Idle;
-	if (_button)
-		buttonState = _button->read();
-
-	return (ReadState)(turnState | buttonState);
-}
-
-void Knob::write(WriteState state)
+void Knob::writeLed(WriteState state)
 {
 	if (_led)
-		_led->write(state);
+		_led->writeLed(state);
 }
-*/

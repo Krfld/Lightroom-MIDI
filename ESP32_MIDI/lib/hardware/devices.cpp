@@ -7,59 +7,69 @@
 
 // ----------------------------------------------------------------------------------------------------
 
-Expander *Devices::_setupExpander(expander_s expander_s)
+Expander *Devices::_getExpander(id_t id) { return _expanders[id]; }
+
+Led *Devices::_setupLed(defaultLed_s defaultLed_s)
 {
-	if (expander_s.sda < 0 || expander_s.scl < 0)
+	if (defaultLed_s.expanderId < 0 || defaultLed_s.pin < 0)
 		return NULL;
 
-	Wire.setPins(expander_s.sda, expander_s.scl);
-	// Wire.setClock(I2C_FREQUENCY);
+	Expander *expander = _getExpander(defaultLed_s.expanderId);
+	return expander ? new Led(expander, defaultLed_s.pin) : NULL;
+}
 
-	Expander *expander = new Expander();
-	return expander->begin_I2C(expander_s.address, &Wire) ? expander : NULL;
-}
-Led *Devices::_setupLed(led_s led_s)
-{
-	Expander *expander = _expanders[led_s.expanderId];
-	return expander ? new Led(expander, led_s.pin) : NULL;
-}
-Button *Devices::_setupButton(button_s button_s, led_s led_s)
-{
-	//!...
-	Expander *expander = _expanders[button_s.expanderId];
-	return expander ? new Button(expander, button_s.pin, _setupLed(button_s.led)) : NULL;
-}
-// Knob *Devices::_setupKnob(knob_s knob_s)
+// Button *Devices::_setupButton(defaultButton_s defaultButton_s, defaultLed_s defaultLed_s)
 // {
-// 	Expander *expander = _expanders[knob_s.expanderId];
-// 	return expander ? new Knob(expander, knob_s.pinA, knob_s.pinB, _setupDefaultButton(knob_s.defaultButton), _setupLed(knob_s.led)) : NULL;
+// 	Expander *expander = _expanders[defaultButton_s.expanderId];
+// 	return expander ? new Button(expander, defaultButton_s.pin, _setupLed(defaultLed_s)) : NULL;
+// }
+// Knob *Devices::_setupKnob(defaultKnob_s defaultKnob_s, defaultButton_s defaultButton_s, defaultLed_s defaultLed_s)
+// {
+// 	Expander *buttonExpander = _expanders[defaultButton_s.expanderId];
+// 	if (!buttonExpander)
+// 		return NULL;
+
+// 	Expander *expander = _expanders[defaultKnob_s.expanderId];
+// 	if (!expander)
+// 		return NULL;
+// 	return expander ? new Knob(expander, defaultKnob_s.pinA, defaultKnob_s.pinB, _setupDefaultButton(knob_s.defaultButton), _setupLed(knob_s.led)) : NULL;
 // }
 
 // ----------------------------------------------------------------------------------------------------
 
 bool Devices::addExpander(expander_s expander_s)
 {
-	Expander *expander = _setupExpander(expander_s);
+	Wire.setPins(expander_s.defaultExpander.sda, expander_s.defaultExpander.scl);
+	// Wire.setClock(I2C_FREQUENCY);
+
+	Expander *expander = new Expander();
+
+	if (!expander->begin_I2C(expander_s.defaultExpander.address, &Wire))
+		return false;
+
 	return expander ? _expanders.insert({expander_s.id, expander}).second : false;
 }
-bool Devices::addLed(led_s led_s)
+bool Devices::addButton(button_s button_s)
 {
-	Led *led = _setupLed(led_s);
-	return led ? _leds.insert({led_s.id, led}).second : false;
-}
-bool Devices::addButton(button_s button_s, led_s led_s = (led_s){-1, -1, -1})
-{
-	Expander *expander = _expanders[button_s.expanderId];
+	Expander *expander = _getExpander(button_s.defaultButton.expanderId);
 	if (!expander)
 		return false;
 
-	Button *button = _setupButton(button_s);
-	return button ? _buttons.insert({button_s.id, button}).second : false;
+	Button *button = new Button(expander, button_s.defaultButton.pin, button_s.function, _setupLed(button_s.defaultLed));
+	return _buttons.insert({button_s.id, button}).second;
 }
-bool Devices::addKnob(knob_s knob_s, led_s led_s = (led_s){-1, -1, -1})
+bool Devices::addKnob(knob_s knob_s)
 {
-	Knob *knob = _setupKnob(knob_s);
-	return knob ? _knobs.insert({knob_s.id, knob}).second : false;
+	Expander *expander = _getExpander(knob_s.defaultKnob.expanderId);
+	if (!expander)
+		return false;
+
+	Expander *buttonExpander = _getExpander(knob_s.defaultButton.expanderId);
+	if (!buttonExpander)
+		return false;
+
+	Knob *knob = new Knob(expander, knob_s.defaultKnob.pinA, knob_s.defaultKnob.pinB, buttonExpander, knob_s.defaultButton.pin, knob_s.function, _setupLed(knob_s.defaultLed));
+	return _knobs.insert({knob_s.id, knob}).second;
 }
 
 // ----------------------------------------------------------------------------------------------------
@@ -70,13 +80,6 @@ bool Devices::removeExpander(id_t id)
 	if (expander)
 		free(expander);
 	return _expanders.erase(id) != 0;
-}
-bool Devices::removeLed(id_t id)
-{
-	Led *led = _leds[id];
-	if (led)
-		free(led);
-	return _leds.erase(id) != 0;
 }
 bool Devices::removeButton(id_t id)
 {

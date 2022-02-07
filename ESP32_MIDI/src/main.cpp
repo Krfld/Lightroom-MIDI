@@ -20,9 +20,12 @@ void setup()
 		log_i("Error");
 	}
 
-	devices.addButton({0, 0, 0});
+	// devices.addButton({0, 0, 0});
 
 	log_i("%d", x.size());
+
+	uint8_t a = -1;
+	log_i("-1: %d", a);
 
 	// devices.addExpander({0, 19, 18, 0x20});
 	// devices.addLed({0, 0, 7});
