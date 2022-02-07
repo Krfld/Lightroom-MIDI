@@ -81,10 +81,11 @@ class Function
 {
 private:
 	size_t QUEUE_SIZE = 1;
-	size_t TASK_STACK_SIZE = 3;
-
 	QueueHandle_t _queue;
+
+	size_t TASK_STACK_SIZE = 3;
 	static void _task(void *pvParameters);
+
 	function_t _function;
 
 public:
@@ -221,6 +222,12 @@ public:
 class Devices
 {
 private:
+	size_t TASKS_STACK_SIZE = 3;
+	size_t DEBOUNCE_MS = 20;
+
+	static void _buttonsTask(void *pvParameters);
+	static void _knobsTask(void *pvParameters);
+
 	std::map<id_t, Expander *> _expanders;
 	std::map<id_t, Button *> _buttons;
 	std::map<id_t, Knob *> _knobs;

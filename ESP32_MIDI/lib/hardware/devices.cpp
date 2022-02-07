@@ -7,33 +7,19 @@
 
 // ----------------------------------------------------------------------------------------------------
 
-Expander *Devices::_getExpander(id_t id) { return _expanders[id]; }
+Expander *Devices::_getExpander(id_t id)
+{
+	return _expanders[id];
+}
 
 Led *Devices::_setupLed(defaultLed_s defaultLed_s)
 {
-	if (defaultLed_s.expanderId < 0 || defaultLed_s.pin < 0)
+	if (defaultLed_s.expanderId == (id_t)-1 || defaultLed_s.pin == (id_t)-1)
 		return NULL;
 
 	Expander *expander = _getExpander(defaultLed_s.expanderId);
 	return expander ? new Led(expander, defaultLed_s.pin) : NULL;
 }
-
-// Button *Devices::_setupButton(defaultButton_s defaultButton_s, defaultLed_s defaultLed_s)
-// {
-// 	Expander *expander = _expanders[defaultButton_s.expanderId];
-// 	return expander ? new Button(expander, defaultButton_s.pin, _setupLed(defaultLed_s)) : NULL;
-// }
-// Knob *Devices::_setupKnob(defaultKnob_s defaultKnob_s, defaultButton_s defaultButton_s, defaultLed_s defaultLed_s)
-// {
-// 	Expander *buttonExpander = _expanders[defaultButton_s.expanderId];
-// 	if (!buttonExpander)
-// 		return NULL;
-
-// 	Expander *expander = _expanders[defaultKnob_s.expanderId];
-// 	if (!expander)
-// 		return NULL;
-// 	return expander ? new Knob(expander, defaultKnob_s.pinA, defaultKnob_s.pinB, _setupDefaultButton(knob_s.defaultButton), _setupLed(knob_s.led)) : NULL;
-// }
 
 // ----------------------------------------------------------------------------------------------------
 
@@ -100,10 +86,69 @@ bool Devices::removeKnob(id_t id)
 
 bool Devices::init()
 {
-	// TODO init tasks to read pins
-	return false;
+	bool error = false;
+	if (!xTaskCreate(_buttonsTask, "Buttons Task", configMINIMAL_STACK_SIZE * TASKS_STACK_SIZE, this, 1, NULL))
+	{
+		log_i("{ERROR} [Buttons Task] xTaskCreate failed");
+		error = true;
+	}
+
+	if (!xTaskCreate(_knobsTask, "Knobs Task", configMINIMAL_STACK_SIZE * TASKS_STACK_SIZE, this, 1, NULL))
+	{
+		log_i("{ERROR} [Knobs Task] xTaskCreate failed");
+		error = true;
+	}
+
+	return error;
 }
 
-void Devices::deinit()
+void Devices::deinit() { log_i("~Devices"); }
+
+void Devices::_buttonsTask(void *pvParameters)
 {
+	Devices *devices = (Devices *)pvParameters;
+
+	TickType_t ticks = xTaskGetTickCount();
+	for (;;)
+	{
+		// Read buttons
+		for (const std::pair<const id_t, Button *> &button : devices->_buttons)
+		{
+			ReadState state = button.second->readButton();
+			if (state != Idle)
+				button.second->sendFunction(state);
+		}
+
+		// Read knob buttons
+		for (const std::pair<const id_t, Knob *> &knob : devices->_knobs)
+		{
+			ReadState state = knob.second->readButton();
+			if (state != Idle)
+				knob.second->sendFunction(state);
+		}
+
+		vTaskDelayUntil(&ticks, pdMS_TO_TICKS(devices->DEBOUNCE_MS));
+	}
+
+	vTaskDelete(NULL);
+}
+
+void Devices::_knobsTask(void *pvParameters)
+{
+	Devices *devices = (Devices *)pvParameters;
+
+	// TickType_t ticks = xTaskGetTickCount();
+	for (;;)
+	{
+		for (const std::pair<const id_t, Knob *> &knob : devices->_knobs)
+		{
+			ReadState state = knob.second->readKnob();
+			if (state != Idle)
+				knob.second->sendFunction(state);
+		}
+
+		//? Delay
+	}
+
+	vTaskDelete(NULL);
 }
