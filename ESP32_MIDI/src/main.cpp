@@ -24,8 +24,6 @@ void f(ReadState state)
 	}
 }
 
-//! Semaphore between each read and write operation (create expander class to override digital read/write)
-
 void setup()
 {
 	log_i("Setup");

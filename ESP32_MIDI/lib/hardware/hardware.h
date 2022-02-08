@@ -21,7 +21,6 @@ enum WriteState
 typedef uint8_t id_t;
 typedef uint8_t pin_t;
 typedef uint8_t bits_t;
-typedef Adafruit_MCP23X17 Expander;
 typedef void (*function_t)(ReadState);
 
 struct defaultExpander_s
@@ -74,6 +73,28 @@ struct knob_s
 
 // ----------------------------------------------------------------------------------------------------
 
+class Expander
+{
+private:
+	enum i2c_frequencies_s : size_t
+	{
+		kHz100 = 100000,
+		kHz400 = 400000,
+		kHz1700 = 1700000,
+	};
+
+	SemaphoreHandle_t _semaphore;
+	Adafruit_MCP23X17 *_expander;
+
+public:
+	Expander(Adafruit_MCP23X17 *expander, pin_t sda, pin_t scl, bits_t address, size_t frequency = kHz1700);
+	~Expander();
+
+	void pinMode(pin_t pin, uint8_t mode);
+	void digitalWrite(pin_t pin, uint8_t value);
+	uint8_t digitalRead(pin_t pin);
+};
+
 class Function
 {
 private:
@@ -116,6 +137,8 @@ private:
 	pin_t _pinB;
 
 	bits_t _state;
+	uint8_t _states;
+	ReadState _lastStates[4];
 	bits_t _readState();
 
 public:
@@ -167,7 +190,6 @@ public:
 class Devices
 {
 private:
-	size_t I2C_FREQUENCY = 1.7e6;
 	size_t TASKS_STACK_SIZE = 3;
 	size_t DEBOUNCE_MS = 20;
 

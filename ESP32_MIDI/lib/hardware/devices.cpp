@@ -1,9 +1,6 @@
 #include "hardware.h"
 
-Expander *Devices::_getExpander(id_t id)
-{
-	return _expanders[id];
-}
+Expander *Devices::_getExpander(id_t id) { return _expanders[id]; }
 
 Led *Devices::_setupLed(defaultLed_s defaultLed_s)
 {
@@ -18,15 +15,9 @@ Led *Devices::_setupLed(defaultLed_s defaultLed_s)
 
 bool Devices::addExpander(expander_s expander_s)
 {
-	Wire.setPins(expander_s.defaultExpander.sda, expander_s.defaultExpander.scl);
-	// Wire.setClock(I2C_FREQUENCY);
+	Expander *expander = new Expander(new Adafruit_MCP23X17(), expander_s.defaultExpander.sda, expander_s.defaultExpander.scl, expander_s.defaultExpander.address);
 
-	Expander *expander = new Expander();
-
-	if (!expander->begin_I2C(expander_s.defaultExpander.address, &Wire))
-		return false;
-
-	return expander ? _expanders.insert({expander_s.id, expander}).second : false;
+	return _expanders.insert({expander_s.id, expander}).second;
 }
 bool Devices::addButton(button_s button_s)
 {

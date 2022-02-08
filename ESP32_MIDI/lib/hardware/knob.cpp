@@ -5,6 +5,8 @@ GenericKnob::GenericKnob(Expander *expander, pin_t pinA, pin_t pinB) : _expander
 	_expander->pinMode(_pinA, INPUT_PULLUP);
 	_expander->pinMode(_pinB, INPUT_PULLUP);
 	_state = _readState();
+	_states = 0;
+	_lastStates = {Idle, Idle, Idle, Idle};
 }
 
 GenericKnob::~GenericKnob() { log_i("~GenericKnob"); }
@@ -36,26 +38,34 @@ ReadState GenericKnob::readKnob()
 	bits_t oldState = _state;
 	_state = _readState();
 
-	switch (oldState | _state)
+	ReadState state = Idle;
+	switch (oldState << 2 | _state)
 	{
 	case 0b0001:
 	case 0b0111:
 	case 0b1000:
 	case 0b1110:
-		return Clockwise;
+		state = Clockwise;
 		break;
 
 	case 0b0010:
 	case 0b0100:
 	case 0b1011:
 	case 0b1101:
-		return CounterClockwise;
+		state = CounterClockwise;
 		break;
 
 	default:
-		return Idle;
+		state = Idle;
 		break;
 	}
+
+	for (int i = 0; i < 4; i++)
+		_lastStates[i] = _lastStates[i + 1];
+	_lastStates[4] = state;
+
+	if (_states++ < 4)
+		return Idle;
 }
 
 // ----------------------------------------------------------------------------------------------------
