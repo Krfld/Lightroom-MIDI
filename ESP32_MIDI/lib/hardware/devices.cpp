@@ -71,13 +71,13 @@ bool Devices::removeKnob(id_t id)
 bool Devices::init()
 {
 	bool error = false;
-	if (!xTaskCreate(_buttonsTask, "Buttons Task", configMINIMAL_STACK_SIZE * TASKS_STACK_SIZE, this, 1, NULL))
+	if (!xTaskCreate(_buttonsTask, "Buttons Task", configMINIMAL_STACK_SIZE * BUTTONS_TASK_STACK_SIZE, this, 1, NULL))
 	{
 		log_i("{ERROR} [Buttons Task] xTaskCreate failed");
 		error = true;
 	}
 
-	if (!xTaskCreate(_knobsTask, "Knobs Task", configMINIMAL_STACK_SIZE * TASKS_STACK_SIZE, this, 1, NULL))
+	if (!xTaskCreate(_knobsTask, "Knobs Task", configMINIMAL_STACK_SIZE * KNOBS_TASK_STACK_SIZE, this, 1, NULL))
 	{
 		log_i("{ERROR} [Knobs Task] xTaskCreate failed");
 		error = true;

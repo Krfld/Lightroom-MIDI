@@ -4,7 +4,7 @@
 #include <map>
 #include "Adafruit_MCP23X17.h"
 
-enum ReadState
+enum ReadState : uint8_t
 {
 	Idle = 0b00,
 	Released = 0b10,
@@ -12,7 +12,7 @@ enum ReadState
 	Clockwise = 0b01 << 2,
 	CounterClockwise = 0b10 << 2,
 };
-enum WriteState
+enum WriteState : uint8_t
 {
 	Off = LOW,
 	On = HIGH,
@@ -98,10 +98,13 @@ public:
 class Function
 {
 private:
-	size_t QUEUE_SIZE = 1;
-	QueueHandle_t _queue;
+	enum settings_s
+	{
+		QUEUE_SIZE = 4,
+		TASK_STACK_SIZE = 3,
+	};
 
-	size_t TASK_STACK_SIZE = 3;
+	QueueHandle_t _queue;
 	static void _task(void *pvParameters);
 
 	function_t _function;
@@ -132,13 +135,19 @@ public:
 class GenericKnob
 {
 private:
+	enum settings_s
+	{
+		SENSITIVITY = 1 << 2 | 1,
+	};
+
 	Expander *_expander;
 	pin_t _pinA;
 	pin_t _pinB;
 
 	bits_t _state;
-	uint8_t _states;
-	ReadState _lastStates[4] = {Idle, Idle, Idle, Idle};
+	uint8_t _states = 0;
+	uint8_t _countClockwise = 0;
+	uint8_t _countCounterClockwise = 0;
 	bits_t _readState();
 
 public:
@@ -190,9 +199,12 @@ public:
 class Devices
 {
 private:
-	// TODO defines to enum ?
-	size_t TASKS_STACK_SIZE = 3;
-	size_t DEBOUNCE_MS = 20;
+	enum settings_s
+	{
+		DEBOUNCE_MS = 20,
+		BUTTONS_TASK_STACK_SIZE = 3,
+		KNOBS_TASK_STACK_SIZE = 3,
+	};
 
 	static void _buttonsTask(void *pvParameters);
 	static void _knobsTask(void *pvParameters);

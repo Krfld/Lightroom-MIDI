@@ -5,7 +5,6 @@ GenericKnob::GenericKnob(Expander *expander, pin_t pinA, pin_t pinB) : _expander
 	_expander->pinMode(_pinA, INPUT_PULLUP);
 	_expander->pinMode(_pinB, INPUT_PULLUP);
 	_state = _readState();
-	_states = 0;
 }
 
 GenericKnob::~GenericKnob() { log_i("~GenericKnob"); }
@@ -59,14 +58,22 @@ ReadState GenericKnob::readKnob()
 		break;
 	}
 
-	for (int i = 0; i < 4; i++)
-		_lastStates[i] = _lastStates[i + 1];
-	_lastStates[4] = state;
+	if (state == Clockwise)
+		_countClockwise++;
+	else if (state == CounterClockwise)
+		_countCounterClockwise++;
 
-	if (_states++ < 4)
+	if (_states++ < SENSITIVITY)
 		return Idle;
 
-	// TODO return the state with most occurences in _lastStates
+	if (_countClockwise > _countCounterClockwise)
+		state = Clockwise;
+	else if (_countCounterClockwise > _countClockwise)
+		state = CounterClockwise;
+
+	_states = 0;
+	_countClockwise = 0;
+	_countCounterClockwise = 0;
 
 	return state;
 }
