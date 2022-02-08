@@ -28,8 +28,9 @@ void setup()
 {
 	log_i("Setup");
 
-	devices.addExpander((expander_s){0, (defaultExpander_s){19, 18, 0x20}});
-	devices.addKnob((knob_s){0, (defaultKnob_s){0, 0, 1}, (defaultButton_s){0, 2}, f});
+	devices.addExpander(0, 19, 18, 0x20);
+	// devices.addKnob(0, new (knob_s){0, 0, 1}, new (button_s){0, 2}, f, NULL);
+	devices.addButton(0, new (button_s){0, 3}, f, NULL);
 
 	devices.init();
 

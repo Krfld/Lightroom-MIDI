@@ -2,44 +2,43 @@
 
 Expander *Devices::_getExpander(id_t id) { return _expanders[id]; }
 
-Led *Devices::_setupLed(defaultLed_s defaultLed_s)
+Led *Devices::_setupLed(led_s *led_s)
 {
-	if (defaultLed_s.expanderId == (id_t)-1 || defaultLed_s.pin == (id_t)-1)
+	if (!led_s)
 		return NULL;
 
-	Expander *expander = _getExpander(defaultLed_s.expanderId);
-	return expander ? new Led(expander, defaultLed_s.pin) : NULL;
+	Expander *expander = _getExpander(led_s->expanderId);
+	return expander ? new Led(expander, led_s->pin) : NULL;
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-bool Devices::addExpander(expander_s expander_s)
+bool Devices::addExpander(id_t id, pin_t sda, pin_t scl, bits_t address)
 {
-	Expander *expander = new Expander(new Adafruit_MCP23X17(), expander_s.defaultExpander.sda, expander_s.defaultExpander.scl, expander_s.defaultExpander.address);
-
-	return _expanders.insert({expander_s.id, expander}).second;
+	Expander *expander = new Expander(new Adafruit_MCP23X17(), sda, scl, address);
+	return _expanders.insert({id, expander}).second;
 }
-bool Devices::addButton(button_s button_s)
+bool Devices::addButton(id_t id, button_s *button_s, function_t function, led_s *led_s)
 {
-	Expander *expander = _getExpander(button_s.defaultButton.expanderId);
+	Expander *expander = _getExpander(button_s->expanderId);
 	if (!expander)
 		return false;
 
-	Button *button = new Button(expander, button_s.defaultButton.pin, button_s.function, _setupLed(button_s.defaultLed));
-	return _buttons.insert({button_s.id, button}).second;
+	Button *button = new Button(expander, button_s->pin, function, _setupLed(led_s));
+	return _buttons.insert({id, button}).second;
 }
-bool Devices::addKnob(knob_s knob_s)
+bool Devices::addKnob(id_t id, knob_s *knob_s, button_s *button_s, function_t function, led_s *led_s)
 {
-	Expander *expander = _getExpander(knob_s.defaultKnob.expanderId);
+	Expander *expander = _getExpander(knob_s->expanderId);
 	if (!expander)
 		return false;
 
-	Expander *buttonExpander = _getExpander(knob_s.defaultButton.expanderId);
+	Expander *buttonExpander = _getExpander(button_s->expanderId);
 	if (!buttonExpander)
 		return false;
 
-	Knob *knob = new Knob(expander, knob_s.defaultKnob.pinA, knob_s.defaultKnob.pinB, buttonExpander, knob_s.defaultButton.pin, knob_s.function, _setupLed(knob_s.defaultLed));
-	return _knobs.insert({knob_s.id, knob}).second;
+	Knob *knob = new Knob(expander, knob_s->pinA, knob_s->pinB, buttonExpander, button_s->pin, function, _setupLed(led_s));
+	return _knobs.insert({id, knob}).second;
 }
 
 // ----------------------------------------------------------------------------------------------------
@@ -109,7 +108,7 @@ void Devices::_buttonsTask(void *pvParameters)
 				knob.second->sendFunction(state);
 		}
 
-		vTaskDelayUntil(&ticks, pdMS_TO_TICKS(devices->DEBOUNCE_MS));
+		vTaskDelayUntil(&ticks, pdMS_TO_TICKS(DEBOUNCE_MS));
 	}
 
 	vTaskDelete(NULL);

@@ -23,52 +23,21 @@ typedef uint8_t pin_t;
 typedef uint8_t bits_t;
 typedef void (*function_t)(ReadState);
 
-struct defaultExpander_s
-{
-	pin_t sda;
-	pin_t scl;
-	bits_t address;
-};
-struct defaultLed_s
-{
-	id_t expanderId = -1;
-	pin_t pin = -1;
-};
-struct defaultButton_s
+struct led_s
 {
 	id_t expanderId;
 	pin_t pin;
 };
-struct defaultKnob_s
+struct button_s
+{
+	id_t expanderId;
+	pin_t pin;
+};
+struct knob_s
 {
 	id_t expanderId;
 	pin_t pinA;
 	pin_t pinB;
-};
-struct expander_s
-{
-	id_t id;
-	defaultExpander_s defaultExpander;
-};
-struct led_s
-{
-	id_t id;
-	defaultLed_s defaultLed;
-};
-struct button_s
-{
-	id_t id;
-	defaultButton_s defaultButton;
-	function_t function;
-	defaultLed_s defaultLed;
-};
-struct knob_s
-{
-	id_t id;
-	defaultKnob_s defaultKnob;
-	defaultButton_s defaultButton;
-	function_t function;
-	defaultLed_s defaultLed;
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -212,12 +181,12 @@ private:
 	std::map<id_t, Knob *> _knobs;
 
 	Expander *_getExpander(id_t id);
-	Led *_setupLed(defaultLed_s defaultLed_s);
+	Led *_setupLed(led_s *led_s);
 
 public:
-	bool addExpander(expander_s expander_s); // Split parameters
-	bool addButton(button_s button_s);
-	bool addKnob(knob_s knob_s);
+	bool addExpander(id_t id, pin_t sda, pin_t scl, bits_t address);
+	bool addButton(id_t id, button_s *button_s, function_t function, led_s *led_s);
+	bool addKnob(id_t id, knob_s *knob_s, button_s *button_s, function_t function, led_s *led_s);
 
 	bool removeExpander(id_t id);
 	bool removeButton(id_t id);
