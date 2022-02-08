@@ -138,7 +138,7 @@ private:
 
 	bits_t _state;
 	uint8_t _states;
-	ReadState _lastStates[4];
+	ReadState _lastStates[4] = {Idle, Idle, Idle, Idle};
 	bits_t _readState();
 
 public:
@@ -190,7 +190,8 @@ public:
 class Devices
 {
 private:
-	size_t TASKS_STACK_SIZE = 3;
+	// TODO defines to enum ?
+	size_t TASKS_STACK_SIZE = 4;
 	size_t DEBOUNCE_MS = 20;
 
 	static void _buttonsTask(void *pvParameters);

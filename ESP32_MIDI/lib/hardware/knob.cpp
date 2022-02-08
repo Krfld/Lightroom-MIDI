@@ -6,7 +6,6 @@ GenericKnob::GenericKnob(Expander *expander, pin_t pinA, pin_t pinB) : _expander
 	_expander->pinMode(_pinB, INPUT_PULLUP);
 	_state = _readState();
 	_states = 0;
-	_lastStates = {Idle, Idle, Idle, Idle};
 }
 
 GenericKnob::~GenericKnob() { log_i("~GenericKnob"); }
