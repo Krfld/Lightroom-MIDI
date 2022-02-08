@@ -78,16 +78,16 @@ class Expander
 private:
 	enum i2c_frequencies_s : size_t
 	{
-		kHz100 = 100000,
-		kHz400 = 400000,
-		kHz1700 = 1700000,
+		K100HZ = 100000,
+		K400HZ = 400000,
+		K1700HZ = 1700000,
 	};
 
 	SemaphoreHandle_t _semaphore;
 	Adafruit_MCP23X17 *_expander;
 
 public:
-	Expander(Adafruit_MCP23X17 *expander, pin_t sda, pin_t scl, bits_t address, size_t frequency = kHz1700);
+	Expander(Adafruit_MCP23X17 *expander, pin_t sda, pin_t scl, bits_t address, size_t frequency = K1700HZ);
 	~Expander();
 
 	void pinMode(pin_t pin, uint8_t mode);
@@ -137,7 +137,7 @@ class GenericKnob
 private:
 	enum settings_s
 	{
-		SENSITIVITY = 1 << 2 | 1,
+		SENSITIVITY = 1,
 	};
 
 	Expander *_expander;
@@ -145,9 +145,7 @@ private:
 	pin_t _pinB;
 
 	bits_t _state;
-	uint8_t _states = 0;
-	uint8_t _countClockwise = 0;
-	uint8_t _countCounterClockwise = 0;
+	int8_t _counts = 0;
 	bits_t _readState();
 
 public:

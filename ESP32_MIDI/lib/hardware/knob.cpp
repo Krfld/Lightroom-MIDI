@@ -21,16 +21,16 @@ ReadState GenericKnob::readKnob()
 	A	B		A	B
 
 	Clockwise
-	0	0		0	1
-	0	1		1	1
-	1	0		0	0
-	1	1		1	0
-
-	CounterClockwise
 	0	0		1	0
 	0	1		0	0
 	1	0		1	1
 	1	1		0	1
+
+	CounterClockwise
+	0	0		0	1
+	0	1		1	1
+	1	0		0	0
+	1	1		1	0
 	*/
 
 	bits_t oldState = _state;
@@ -39,41 +39,29 @@ ReadState GenericKnob::readKnob()
 	ReadState state = Idle;
 	switch (oldState << 2 | _state)
 	{
-	case 0b0001:
-	case 0b0111:
-	case 0b1000:
-	case 0b1110:
-		state = Clockwise;
-		break;
-
 	case 0b0010:
 	case 0b0100:
 	case 0b1011:
 	case 0b1101:
-		state = CounterClockwise;
+		_counts++; // Clockwise
+		break;
+
+	case 0b0001:
+	case 0b0111:
+	case 0b1000:
+	case 0b1110:
+		_counts--; // CounterClockwise
 		break;
 
 	default:
-		state = Idle;
 		break;
 	}
 
-	if (state == Clockwise)
-		_countClockwise++;
-	else if (state == CounterClockwise)
-		_countCounterClockwise++;
-
-	if (_states++ < SENSITIVITY)
-		return Idle;
-
-	if (_countClockwise > _countCounterClockwise)
-		state = Clockwise;
-	else if (_countCounterClockwise > _countClockwise)
-		state = CounterClockwise;
-
-	_states = 0;
-	_countClockwise = 0;
-	_countCounterClockwise = 0;
+	if (abs(_counts) > SENSITIVITY)
+	{
+		state = _counts > 0 ? Clockwise : CounterClockwise;
+		_counts = 0;
+	}
 
 	return state;
 }
