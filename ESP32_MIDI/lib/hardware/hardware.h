@@ -87,7 +87,7 @@ private:
 	Adafruit_MCP23X17 *_expander;
 
 public:
-	Expander(Adafruit_MCP23X17 *expander, pin_t sda, pin_t scl, bits_t address, size_t frequency = K1700HZ);
+	Expander(Adafruit_MCP23X17 *expander, pin_t sda, pin_t scl, bits_t address, size_t frequency = K100HZ);
 	~Expander();
 
 	void pinMode(pin_t pin, uint8_t mode);
@@ -137,7 +137,7 @@ class GenericKnob
 private:
 	enum settings_s
 	{
-		SENSITIVITY = 1,
+		THRESHOLD = 1,
 	};
 
 	Expander *_expander;
@@ -215,7 +215,7 @@ private:
 	Led *_setupLed(defaultLed_s defaultLed_s);
 
 public:
-	bool addExpander(expander_s expander_s);
+	bool addExpander(expander_s expander_s); // Split parameters
 	bool addButton(button_s button_s);
 	bool addKnob(knob_s knob_s);
 

@@ -28,8 +28,6 @@ void setup()
 {
 	log_i("Setup");
 
-	// TODO try cout
-
 	devices.addExpander((expander_s){0, (defaultExpander_s){19, 18, 0x20}});
 	devices.addKnob((knob_s){0, (defaultKnob_s){0, 0, 1}, (defaultButton_s){0, 2}, f});
 

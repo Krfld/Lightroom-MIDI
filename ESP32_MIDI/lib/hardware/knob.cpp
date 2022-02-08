@@ -57,7 +57,7 @@ ReadState GenericKnob::readKnob()
 		break;
 	}
 
-	if (abs(_counts) > SENSITIVITY)
+	if (abs(_counts) > THRESHOLD)
 	{
 		state = _counts > 0 ? Clockwise : CounterClockwise;
 		_counts = 0;
