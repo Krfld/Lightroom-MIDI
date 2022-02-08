@@ -66,6 +66,10 @@ ReadState GenericKnob::readKnob()
 
 	if (_states++ < 4)
 		return Idle;
+
+	// TODO return the state with most occurences in _lastStates
+
+	return state;
 }
 
 // ----------------------------------------------------------------------------------------------------
