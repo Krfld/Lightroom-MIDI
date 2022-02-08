@@ -191,7 +191,7 @@ class Devices
 {
 private:
 	// TODO defines to enum ?
-	size_t TASKS_STACK_SIZE = 4;
+	size_t TASKS_STACK_SIZE = 3;
 	size_t DEBOUNCE_MS = 20;
 
 	static void _buttonsTask(void *pvParameters);
