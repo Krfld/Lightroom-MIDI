@@ -5,12 +5,15 @@ Expander::Expander(Adafruit_MCP23X17 *expander, pin_t sda, pin_t scl, bits_t add
 	if (!_semaphore)
 		log_i("{ERROR} [Expander] xSemaphoreCreateMutex failed");
 
-	Wire.setPins(sda, scl);
-	Wire.setClock(frequency);
-
 	xSemaphoreTake(_semaphore, portMAX_DELAY);
-	if (!_expander->begin_I2C(address, &Wire))
+
+	TwoWire *wire = new TwoWire(0);
+	wire->setPins(sda, scl);
+	wire->setClock(frequency);
+
+	if (!_expander->begin_I2C(address, wire))
 		log_i("{ERROR} [Expander] begin_I2C failed");
+
 	xSemaphoreGive(_semaphore);
 }
 
