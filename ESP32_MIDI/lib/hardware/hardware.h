@@ -4,6 +4,8 @@
 #include <map>
 #include "Adafruit_MCP23X17.h"
 
+// TODO split devices from hardware so no outside can access the hardware
+
 enum ReadState : uint8_t
 {
 	Idle = 0b00,
@@ -69,7 +71,7 @@ class Function
 private:
 	enum settings_s
 	{
-		QUEUE_SIZE = 4,
+		QUEUE_SIZE = 1,
 		TASK_STACK_SIZE = 3,
 	};
 
@@ -125,6 +127,8 @@ public:
 };
 
 // ----------------------------------------------------------------------------------------------------
+
+// TODO add queue to process write
 
 class Led
 {
