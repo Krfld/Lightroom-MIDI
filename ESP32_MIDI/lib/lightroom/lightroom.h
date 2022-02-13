@@ -1,7 +1,7 @@
 #ifndef LIGHTROOM_H
 #define LIGHTROOM_H
 
-#include "hardware.h"
+#include "devices.h"
 
 //#include midi
 

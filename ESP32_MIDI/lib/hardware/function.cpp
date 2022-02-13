@@ -28,4 +28,4 @@ void Function::_task(void *pvParameters)
 	vTaskDelete(NULL);
 }
 
-void Function::sendFunction(ReadState state) { xQueueOverwrite(_queue, &state); } // xQueueSend(_queue, &state, portMAX_DELAY);
+void Function::sendFunction(ReadState state) { xQueueSend(_queue, &state, portMAX_DELAY); }
