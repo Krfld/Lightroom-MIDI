@@ -8,6 +8,8 @@
 class Lightroom
 {
 private:
+	uint8_t _menu;
+
 public:
 };
 
