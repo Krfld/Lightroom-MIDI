@@ -5,22 +5,44 @@
 
 //#include midi
 
-#define BASIC "Basic"					  // 1
-#define TONE_CURVE "Tone Curve"			  // 2
-#define HSL_COLOR "HSL/Color"			  // 3
-#define COLOR_GRADING "Color Grading"	  // 4
-#define DETAIL "Detail"					  // 5
-#define LENS_CORRECTION "Lens Correction" // 6
-#define TRANSFORM "Transform"			  // 7
-#define EFFECTS "Effects"				  // 8
-#define CALIBRATION "Calibration"		  // 9
+#define BASIC "Basic"
+#define TONE_CURVE "Tone Curve"
+#define HSL_COLOR "HSL/Color"
+#define COLOR_GRADING "Color Grading"
+#define DETAIL "Detail"
+#define LENS_CORRECTION "Lens Correction"
+#define TRANSFORM "Transform"
+#define EFFECTS "Effects"
+#define CALIBRATION "Calibration"
 
 class Lightroom
 {
 private:
-	uint8_t _menu;
+	enum menus_e
+	{
+		Basic = 1,
+		ToneCurve,
+		HSL_Color,
+		ColorGrading,
+		Detail,
+		LensCorrection,
+		Transform,
+		Effects,
+		Calibration,
+	};
+
+	enum menuSettings_e
+	{
+		FIRST_MENU = Basic,
+		LAST_MENU = Calibration,
+	};
+
+	menus_e _menu = Basic;
+
+	Devices _devices;
 
 public:
+	Lightroom();
 };
 
 #endif // LIGHTROOM_H

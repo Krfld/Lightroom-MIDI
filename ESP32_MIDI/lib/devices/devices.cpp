@@ -4,7 +4,15 @@ led_t *LED(id_t expanderId, pin_t pin) { return new (led_t){expanderId, pin}; }
 button_t *BUTTON(id_t expanderId, pin_t pin) { return new (button_t){expanderId, pin}; }
 knob_t *KNOB(id_t expanderId, pin_t pinA, pin_t pinB) { return new (knob_t){expanderId, pinA, pinB}; }
 
-Expander *Devices::_getExpander(id_t id) { return _expanders[id]; }
+Devices::Devices() { log_i("Devices"); }
+Devices::~Devices() { log_i("~Devices"); }
+
+// ----------------------------------------------------------------------------------------------------
+
+Expander *Devices::_getExpander(id_t id)
+{
+	return _expanders[id];
+}
 
 Led *Devices::_setupLed(led_t *led_t)
 {

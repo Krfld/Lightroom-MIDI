@@ -3,7 +3,7 @@
 
 #include "Adafruit_MCP23X17.h"
 
-enum ReadState : uint8_t
+enum ReadState
 {
 	Idle = 0b00,
 	Released = 0b10,
@@ -11,7 +11,7 @@ enum ReadState : uint8_t
 	Clockwise = 0b01 << 2,
 	CounterClockwise = 0b10 << 2,
 };
-enum WriteState : uint8_t
+enum WriteState
 {
 	Off = LOW,
 	On = HIGH,
@@ -27,7 +27,7 @@ typedef void (*function_t)(ReadState);
 class Expander
 {
 private:
-	enum i2c_frequencies_e : size_t
+	enum i2c_frequencies_e
 	{
 		K100HZ = 100000,
 		K400HZ = 400000,

@@ -48,6 +48,9 @@ private:
 	Led *_setupLed(led_t *led_t);
 
 public:
+	Devices();
+	~Devices();
+
 	bool addExpander(id_t id, pin_t sda, pin_t scl, bits_t address);
 	bool addButton(id_t id, button_t *button_t, function_t function, led_t *led_t);
 	bool addKnob(id_t id, knob_t *knob_t, button_t *button_t, function_t function, led_t *led_t);
