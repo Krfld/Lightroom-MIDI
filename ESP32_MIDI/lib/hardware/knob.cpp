@@ -70,17 +70,9 @@ ReadState GenericKnob::readKnob()
 
 Knob::Knob(Expander *expander, pin_t pinA, pin_t pinB,
 		   Expander *buttonExpander, pin_t buttonPin,
-		   function_t function,
-		   Led *led)
+		   function_t function)
 	: GenericKnob(expander, pinA, pinB),
 	  GenericButton(buttonExpander, buttonPin),
-	  Function(function),
-	  _led(led) {}
+	  Function(function) {}
 
 Knob::~Knob() { log_i("~Knob"); }
-
-void Knob::writeLed(WriteState state)
-{
-	if (_led)
-		_led->writeLed(state);
-}

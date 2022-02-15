@@ -29,8 +29,8 @@ void setup()
 	log_i("Setup");
 
 	devices.addExpander(0, 19, 18, 0x20);
-	devices.addKnob(0, KNOB(0, 0, 1), BUTTON(0, 2), &f, NULL);
-	devices.addButton(0, BUTTON(0, 3), &f, NULL);
+	devices.addKnob(0, KNOB(0, 0, 1), BUTTON(0, 2), &f);
+	devices.addButton(0, BUTTON(0, 3), &f);
 
 	devices.init();
 

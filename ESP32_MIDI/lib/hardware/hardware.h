@@ -124,25 +124,17 @@ public:
 class Button : public GenericButton, public Function
 {
 private:
-	Led *_led;
-
 public:
-	Button(Expander *expander, pin_t pin, function_t function, Led *led);
+	Button(Expander *expander, pin_t pin, function_t function);
 	~Button();
-
-	void writeLed(WriteState state);
 };
 
 class Knob : public GenericKnob, public GenericButton, public Function
 {
 private:
-	Led *_led;
-
 public:
-	Knob(Expander *expander, pin_t pinA, pin_t pinB, Expander *buttonExpander, pin_t buttonPin, function_t function, Led *led);
+	Knob(Expander *expander, pin_t pinA, pin_t pinB, Expander *buttonExpander, pin_t buttonPin, function_t function);
 	~Knob();
-
-	void writeLed(WriteState state);
 };
 
 #endif // HARDWARE_H

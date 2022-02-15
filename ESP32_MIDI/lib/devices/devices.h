@@ -41,21 +41,23 @@ private:
 	static void _knobsTask(void *pvParameters);
 
 	std::map<id_t, Expander *> _expanders;
+	std::map<id_t, Led *> _leds;
 	std::map<id_t, Button *> _buttons;
 	std::map<id_t, Knob *> _knobs;
 
 	Expander *_getExpander(id_t id);
-	Led *_setupLed(led_t *led_t);
 
 public:
 	Devices();
 	~Devices();
 
 	bool addExpander(id_t id, pin_t sda, pin_t scl, bits_t address);
-	bool addButton(id_t id, button_t *button_t, function_t function, led_t *led_t);
-	bool addKnob(id_t id, knob_t *knob_t, button_t *button_t, function_t function, led_t *led_t);
+	bool addLed(id_t id, led_t *led_t);
+	bool addButton(id_t id, button_t *button_t, function_t function);
+	bool addKnob(id_t id, knob_t *knob_t, button_t *button_t, function_t function);
 
 	bool removeExpander(id_t id);
+	bool removeLed(id_t id);
 	bool removeButton(id_t id);
 	bool removeKnob(id_t id);
 

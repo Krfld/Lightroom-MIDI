@@ -7,21 +7,7 @@ knob_t *KNOB(id_t expanderId, pin_t pinA, pin_t pinB) { return new (knob_t){expa
 Devices::Devices() { log_i("Devices"); }
 Devices::~Devices() { log_i("~Devices"); }
 
-// ----------------------------------------------------------------------------------------------------
-
-Expander *Devices::_getExpander(id_t id)
-{
-	return _expanders[id];
-}
-
-Led *Devices::_setupLed(led_t *led_t)
-{
-	if (!led_t)
-		return NULL;
-
-	Expander *expander = _getExpander(led_t->expanderId);
-	return expander ? new Led(expander, led_t->pin) : NULL;
-}
+Expander *Devices::_getExpander(id_t id) { return _expanders[id]; }
 
 // ----------------------------------------------------------------------------------------------------
 
@@ -30,17 +16,35 @@ bool Devices::addExpander(id_t id, pin_t sda, pin_t scl, bits_t address)
 	Expander *expander = new Expander(new Adafruit_MCP23X17(), sda, scl, address);
 	return _expanders.insert({id, expander}).second;
 }
-bool Devices::addButton(id_t id, button_t *button_t, function_t function, led_t *led_t)
+bool Devices::addLed(id_t id, led_t *led_t)
 {
+	if (!led_t)
+		return false;
+
+	Expander *expander = _getExpander(led_t->expanderId);
+	if (!expander)
+		return false;
+
+	Led *led = new Led(expander, led_t->pin);
+	return _leds.insert({id, led}).second;
+}
+bool Devices::addButton(id_t id, button_t *button_t, function_t function)
+{
+	if (!button_t)
+		return false;
+
 	Expander *expander = _getExpander(button_t->expanderId);
 	if (!expander)
 		return false;
 
-	Button *button = new Button(expander, button_t->pin, function, _setupLed(led_t));
+	Button *button = new Button(expander, button_t->pin, function);
 	return _buttons.insert({id, button}).second;
 }
-bool Devices::addKnob(id_t id, knob_t *knob_t, button_t *button_t, function_t function, led_t *led_t)
+bool Devices::addKnob(id_t id, knob_t *knob_t, button_t *button_t, function_t function)
 {
+	if (!knob_t || !button_t)
+		return false;
+
 	Expander *expander = _getExpander(knob_t->expanderId);
 	if (!expander)
 		return false;
@@ -49,7 +53,7 @@ bool Devices::addKnob(id_t id, knob_t *knob_t, button_t *button_t, function_t fu
 	if (!buttonExpander)
 		return false;
 
-	Knob *knob = new Knob(expander, knob_t->pinA, knob_t->pinB, buttonExpander, button_t->pin, function, _setupLed(led_t));
+	Knob *knob = new Knob(expander, knob_t->pinA, knob_t->pinB, buttonExpander, button_t->pin, function);
 	return _knobs.insert({id, knob}).second;
 }
 

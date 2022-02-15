@@ -21,16 +21,8 @@ ReadState GenericButton::readButton()
 Button::
 	Button(Expander *expander,
 		   pin_t pin,
-		   function_t function,
-		   Led *led)
+		   function_t function)
 	: GenericButton(expander, pin),
-	  Function(function),
-	  _led(led) {}
+	  Function(function) {}
 
 Button::~Button() { log_i("~Button"); }
-
-void Button::writeLed(WriteState state)
-{
-	if (_led)
-		_led->writeLed(state);
-}
