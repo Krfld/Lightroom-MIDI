@@ -83,6 +83,16 @@ bool Devices::removeKnob(id_t id)
 
 // ----------------------------------------------------------------------------------------------------
 
+bool Devices::writeLed(id_t id, WriteState state)
+{
+	Led *led = _leds[id];
+	if (!led)
+		return false;
+
+	led->writeLed(state);
+	return true;
+}
+
 bool Devices::init()
 {
 	bool error = false;

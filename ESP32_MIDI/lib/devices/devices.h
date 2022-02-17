@@ -61,6 +61,8 @@ public:
 	bool removeButton(id_t id);
 	bool removeKnob(id_t id);
 
+	bool writeLed(id_t id, WriteState state);
+
 	bool init();
 };
 
