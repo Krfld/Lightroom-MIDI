@@ -1,9 +1,9 @@
 #ifndef LIGHTROOM_H
 #define LIGHTROOM_H
 
-#include "devices.h"
-
 //#include midi
+
+#include "devices.h"
 
 #define BASIC "Basic"
 #define TONE_CURVE "Tone Curve"
