@@ -3,6 +3,9 @@
 
 #include "Adafruit_MCP23X17.h"
 
+typedef uint8_t pin_t;
+typedef uint8_t bits_t;
+
 enum ReadState
 {
 	Idle = 0b00,
@@ -16,11 +19,6 @@ enum WriteState
 	Off = LOW,
 	On = HIGH,
 };
-
-typedef uint8_t id_t;
-typedef uint8_t pin_t;
-typedef uint8_t bits_t;
-typedef void (*function_t)(ReadState);
 
 // ----------------------------------------------------------------------------------------------------
 
@@ -44,27 +42,6 @@ public:
 	void pinMode(pin_t pin, uint8_t mode);
 	void digitalWrite(pin_t pin, uint8_t value);
 	uint8_t digitalRead(pin_t pin);
-};
-
-class Function
-{
-private:
-	enum settings_e
-	{
-		QUEUE_SIZE = 1,
-		TASK_STACK_SIZE = 3,
-	};
-
-	QueueHandle_t _queue;
-	static void _task(void *pvParameters);
-
-	function_t _function;
-
-public:
-	Function(function_t function);
-	~Function();
-
-	void sendFunction(ReadState state);
 };
 
 class GenericButton
@@ -121,19 +98,19 @@ public:
 	void writeLed(WriteState value);
 };
 
-class Button : public GenericButton, public Function
+class Button : public GenericButton
 {
 private:
 public:
-	Button(Expander *expander, pin_t pin, function_t function);
+	Button(Expander *expander, pin_t pin);
 	~Button();
 };
 
-class Knob : public GenericKnob, public GenericButton, public Function
+class Knob : public GenericKnob, public GenericButton
 {
 private:
 public:
-	Knob(Expander *expander, pin_t pinA, pin_t pinB, Expander *buttonExpander, pin_t buttonPin, function_t function);
+	Knob(Expander *expander, pin_t pinA, pin_t pinB, Expander *buttonExpander, pin_t buttonPin);
 	~Knob();
 };
 

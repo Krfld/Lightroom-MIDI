@@ -1,6 +1,7 @@
 #include "hardware.h"
 
-GenericKnob::GenericKnob(Expander *expander, pin_t pinA, pin_t pinB) : _expander(expander), _pinA(pinA), _pinB(pinB)
+GenericKnob::GenericKnob(Expander *expander, pin_t pinA, pin_t pinB)
+	: _expander(expander), _pinA(pinA), _pinB(pinB)
 {
 	_expander->pinMode(_pinA, INPUT_PULLUP);
 	_expander->pinMode(_pinB, INPUT_PULLUP);
@@ -68,11 +69,7 @@ ReadState GenericKnob::readKnob()
 
 // ----------------------------------------------------------------------------------------------------
 
-Knob::Knob(Expander *expander, pin_t pinA, pin_t pinB,
-		   Expander *buttonExpander, pin_t buttonPin,
-		   function_t function)
-	: GenericKnob(expander, pinA, pinB),
-	  GenericButton(buttonExpander, buttonPin),
-	  Function(function) {}
+Knob::Knob(Expander *expander, pin_t pinA, pin_t pinB, Expander *buttonExpander, pin_t buttonPin)
+	: GenericKnob(expander, pinA, pinB), GenericButton(buttonExpander, buttonPin) {}
 
 Knob::~Knob() { log_i("~Knob"); }

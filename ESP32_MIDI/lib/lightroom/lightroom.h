@@ -3,7 +3,7 @@
 
 //#include midi
 
-#include "devices.h"
+// #include "devices.h"
 
 #define BASIC "Basic"
 #define TONE_CURVE "Tone Curve"
@@ -39,7 +39,7 @@ private:
 
 	menus_e _menu = Basic;
 
-	Devices _devices;
+	// Devices _devices;
 
 public:
 	Lightroom();

@@ -4,6 +4,23 @@
 #include <map>
 #include "hardware.h"
 
+typedef uint8_t id_t;
+
+enum Device
+{
+	BUTTON,
+	KNOB,
+};
+
+typedef struct
+{
+	Device device;
+	id_t id;
+	ReadState state;
+} params_t;
+
+typedef void (*function_t)(params_t);
+
 typedef struct
 {
 	id_t expanderId;
@@ -23,9 +40,11 @@ typedef struct
 	pin_t pinB;
 } knob_t;
 
-led_t *LED(id_t expanderId, pin_t pin);
-button_t *BUTTON(id_t expanderId, pin_t pin);
-knob_t *KNOB(id_t expanderId, pin_t pinA, pin_t pinB);
+led_t led(id_t expanderId, pin_t pin);
+button_t button(id_t expanderId, pin_t pin);
+knob_t knob(id_t expanderId, pin_t pinA, pin_t pinB);
+
+// ----------------------------------------------------------------------------------------------------
 
 class Devices
 {
@@ -33,9 +52,15 @@ private:
 	enum settings_e
 	{
 		DEBOUNCE_MS = 10,
+		QUEUE_SIZE = 1 << 4, // 16
+		FUNCTION_TASK_STACK_SIZE = 3,
 		BUTTONS_TASK_STACK_SIZE = 3,
 		KNOBS_TASK_STACK_SIZE = 3,
 	};
+
+	function_t _function;
+	QueueHandle_t _functionQueue;
+	static void _functionTask(void *pvParameters);
 
 	static void _buttonsTask(void *pvParameters);
 	static void _knobsTask(void *pvParameters);
@@ -46,15 +71,16 @@ private:
 	std::map<id_t, Knob *> _knobs;
 
 	Expander *_getExpander(id_t id);
+	void _sendFunction(params_t params);
 
 public:
-	Devices();
+	Devices(function_t function);
 	~Devices();
 
 	bool addExpander(id_t id, pin_t sda, pin_t scl, bits_t address);
-	bool addLed(id_t id, led_t *led_t);
-	bool addButton(id_t id, button_t *button_t, function_t function);
-	bool addKnob(id_t id, knob_t *knob_t, button_t *button_t, function_t function);
+	bool addLed(id_t id, led_t led_t);
+	bool addButton(id_t id, button_t button_t);
+	bool addKnob(id_t id, knob_t knob_t, button_t button_t);
 
 	bool removeExpander(id_t id);
 	bool removeLed(id_t id);
@@ -62,8 +88,6 @@ public:
 	bool removeKnob(id_t id);
 
 	bool writeLed(id_t id, WriteState state);
-
-	bool init();
 };
 
 #endif // DEVICES_H

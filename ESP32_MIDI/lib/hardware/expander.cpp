@@ -1,6 +1,7 @@
 #include "hardware.h"
 
-Expander::Expander(Adafruit_MCP23X17 *expander, pin_t sda, pin_t scl, bits_t address, size_t frequency) : _semaphore(xSemaphoreCreateMutex()), _expander(expander)
+Expander::Expander(Adafruit_MCP23X17 *expander, pin_t sda, pin_t scl, bits_t address, size_t frequency)
+	: _semaphore(xSemaphoreCreateMutex()), _expander(expander)
 {
 	if (!_semaphore)
 		log_i("{ERROR} [Expander] xSemaphoreCreateMutex failed");
