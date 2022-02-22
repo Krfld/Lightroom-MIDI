@@ -10,6 +10,4 @@ void setup()
 	log_i("Ready");
 }
 
-void loop()
-{
-}
+void loop() {}
