@@ -25,15 +25,15 @@ enum WriteState
 class Expander
 {
 private:
-	enum i2c_frequencies_e
+	enum I2C_frequencies
 	{
 		K100HZ = 100000,
 		K400HZ = 400000,
 		K1700HZ = 1700000,
 	};
 
-	SemaphoreHandle_t _semaphore;
 	Adafruit_MCP23X17 *_expander;
+	const SemaphoreHandle_t _semaphore;
 
 public:
 	Expander(Adafruit_MCP23X17 *expander, pin_t sda, pin_t scl, bits_t address, size_t frequency = K100HZ);
@@ -48,7 +48,7 @@ class GenericButton
 {
 private:
 	Expander *_expander;
-	pin_t _pin;
+	const pin_t _pin;
 
 	bits_t _state;
 	bits_t _readState();
@@ -63,14 +63,14 @@ public:
 class GenericKnob
 {
 private:
-	enum settings_s
+	enum Settings
 	{
 		THRESHOLD = 1,
 	};
 
 	Expander *_expander;
-	pin_t _pinA;
-	pin_t _pinB;
+	const pin_t _pinA;
+	const pin_t _pinB;
 
 	bits_t _state;
 	int8_t _counts = 0;
@@ -89,7 +89,7 @@ class Led
 {
 private:
 	Expander *_expander;
-	pin_t _pin;
+	const pin_t _pin;
 
 public:
 	Led(Expander *expander, pin_t pin);

@@ -3,7 +3,8 @@
 
 //#include midi
 
-// #include "devices.h"
+#include <map>
+#include "devices.h"
 
 #define BASIC "Basic"
 #define TONE_CURVE "Tone Curve"
@@ -15,34 +16,59 @@
 #define EFFECTS "Effects"
 #define CALIBRATION "Calibration"
 
+enum Menu
+{
+	Basic = 1,
+	ToneCurve,
+	HSL_Color,
+	ColorGrading,
+	Detail,
+	LensCorrection,
+	Transform,
+	Effects,
+	Calibration,
+};
+
+enum MenuSettings
+{
+	FIRST_MENU = Basic,
+	LAST_MENU = Calibration,
+};
+
+const std::map<Menu, id_t> SubMenus = {
+	{Basic, 2},
+	{ToneCurve, 1},
+	{HSL_Color, 1},
+	{ColorGrading, 1},
+	{Detail, 2},
+	{LensCorrection, 2},
+	{Transform, 1},
+	{Effects, 1},
+	{Calibration, 1},
+};
+
+typedef struct
+{
+	Menu menu;
+	id_t subMenu;
+} current_t;
+
 class Lightroom
 {
 private:
-	enum menus_e
-	{
-		Basic = 1,
-		ToneCurve,
-		HSL_Color,
-		ColorGrading,
-		Detail,
-		LensCorrection,
-		Transform,
-		Effects,
-		Calibration,
-	};
+	static current_t _current;
 
-	enum menuSettings_e
-	{
-		FIRST_MENU = Basic,
-		LAST_MENU = Calibration,
-	};
+	const Devices _devices;
 
-	menus_e _menu = Basic;
+	static void _test(params_t params);
+	static void _logic(params_t params);
 
-	// Devices _devices;
+	static void _buttonsLogic(id_t id, ReadState state);
+	static void _knobsLogic(id_t id, ReadState state);
 
 public:
 	Lightroom();
+	~Lightroom();
 };
 
 #endif // LIGHTROOM_H

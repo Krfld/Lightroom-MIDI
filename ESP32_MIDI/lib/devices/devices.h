@@ -49,7 +49,7 @@ knob_t knob(id_t expanderId, pin_t pinA, pin_t pinB);
 class Devices
 {
 private:
-	enum settings_e
+	enum Settings
 	{
 		DEBOUNCE_MS = 10,
 		QUEUE_SIZE = 1 << 4, // 16
@@ -58,8 +58,8 @@ private:
 		KNOBS_TASK_STACK_SIZE = 3,
 	};
 
-	function_t _function;
-	QueueHandle_t _functionQueue;
+	const function_t _function;
+	const QueueHandle_t _functionQueue;
 	static void _functionTask(void *pvParameters);
 
 	static void _buttonsTask(void *pvParameters);

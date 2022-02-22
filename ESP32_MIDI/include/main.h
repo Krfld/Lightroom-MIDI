@@ -2,6 +2,6 @@
 #define MAIN_H
 
 #include <esp32-hal.h>
-#include "devices.h"
+#include "lightroom.h"
 
 #endif // MAIN_H
