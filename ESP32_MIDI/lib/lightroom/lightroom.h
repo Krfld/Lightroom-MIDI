@@ -6,15 +6,15 @@
 #include <map>
 #include "devices.h"
 
-#define BASIC "Basic"
-#define TONE_CURVE "Tone Curve"
-#define HSL_COLOR "HSL/Color"
-#define COLOR_GRADING "Color Grading"
-#define DETAIL "Detail"
-#define LENS_CORRECTION "Lens Correction"
-#define TRANSFORM "Transform"
-#define EFFECTS "Effects"
-#define CALIBRATION "Calibration"
+// #define BASIC "Basic"
+// #define TONE_CURVE "Tone Curve"
+// #define HSL_COLOR "HSL/Color"
+// #define COLOR_GRADING "Color Grading"
+// #define DETAIL "Detail"
+// #define LENS_CORRECTION "Lens Correction"
+// #define TRANSFORM "Transform"
+// #define EFFECTS "Effects"
+// #define CALIBRATION "Calibration"
 
 enum Menu
 {
@@ -27,10 +27,6 @@ enum Menu
 	Transform,
 	Effects,
 	Calibration,
-};
-
-enum MenuSettings
-{
 	FIRST_MENU = Basic,
 	LAST_MENU = Calibration,
 };

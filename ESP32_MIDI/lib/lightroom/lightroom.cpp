@@ -1,6 +1,9 @@
 #include "lightroom.h"
 
-Lightroom::Lightroom() : _devices(Devices(&_logic)) {}
+Lightroom::Lightroom() : _devices(Devices(&_logic))
+{
+	// TODO add devices
+}
 
 Lightroom::~Lightroom() { log_i("~Lightroom"); }
 
