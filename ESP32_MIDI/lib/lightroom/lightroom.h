@@ -175,7 +175,7 @@ const std::map<Menu, std::map<id_t, buttonFunction_t>> buttonsFunctions = {
 	  {12, []() {}}}},
 };
 
-const std::map<Menu, std::map<id_t, buttonFunction_t>> knobsFunctions = {
+const std::map<Menu, std::map<id_t, knobFunction_t>> knobsFunctions = {
 	{None,
 	 {{0, []() {}}}},
 	{Basic,
