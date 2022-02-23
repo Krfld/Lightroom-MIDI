@@ -19,7 +19,7 @@ typedef struct
 	ReadState state;
 } params_t;
 
-typedef void (*function_t)(params_t);
+typedef void (*callback_t)(params_t);
 
 typedef struct
 {
@@ -58,7 +58,7 @@ private:
 		KNOBS_TASK_STACK_SIZE = 3,
 	};
 
-	const function_t _function;
+	const callback_t _function;
 	const QueueHandle_t _functionQueue;
 	static void _functionTask(void *pvParameters);
 
@@ -74,7 +74,7 @@ private:
 	void _sendFunction(params_t params);
 
 public:
-	Devices(function_t function);
+	Devices(callback_t function);
 	~Devices();
 
 	bool addExpander(id_t id, pin_t sda, pin_t scl, bits_t address);

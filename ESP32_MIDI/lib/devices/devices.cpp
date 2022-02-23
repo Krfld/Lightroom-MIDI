@@ -4,7 +4,7 @@ led_t led(id_t expanderId, pin_t pin) { return (led_t){expanderId, pin}; }
 button_t button(id_t expanderId, pin_t pin) { return (button_t){expanderId, pin}; }
 knob_t knob(id_t expanderId, pin_t pinA, pin_t pinB) { return (knob_t){expanderId, pinA, pinB}; }
 
-Devices::Devices(function_t function)
+Devices::Devices(callback_t function)
 	: _function(function), _functionQueue(xQueueCreate(QUEUE_SIZE, sizeof(params_t)))
 {
 	if (!_functionQueue)

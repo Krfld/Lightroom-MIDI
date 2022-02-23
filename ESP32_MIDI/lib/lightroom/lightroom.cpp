@@ -86,18 +86,20 @@ void Lightroom::_buttonsLogic(id_t id, ReadState state)
 	case 8:
 		break;
 	case 9:
-		//* Changing menu updates leds
+		//* Changing menu updates leds and writes LCD
 		break;
 	case 10:
-		//* Changing menu updates leds
+		//* Changing menu updates leds and writes LCD
 		break;
 	case 11:
+		//* Changing menu updates leds and writes LCD
 		if (_current.subMenu > SubMenus.at(_current.menu))
 			_current.subMenu--;
 		else
 			_current.subMenu = SubMenus.at(_current.menu);
 		break;
 	case 12:
+		//* Changing menu updates leds and writes LCD
 		if (_current.subMenu < SubMenus.at(_current.menu))
 			_current.subMenu++;
 		else
