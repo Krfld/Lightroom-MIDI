@@ -70,6 +70,7 @@ private:
 	static void _buttonsLogic(id_t id, ReadState state);
 	static void _knobsLogic(id_t id, ReadState state);
 
+	// static std::map<Menu, std::map<id_t, std::map<id_t, value_t>>> _buttonsValues;
 	static std::map<Menu, std::map<id_t, std::map<id_t, value_t>>> _knobsValues;
 
 public:

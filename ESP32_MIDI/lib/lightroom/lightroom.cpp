@@ -140,6 +140,7 @@ std::map<Menu, std::map<id_t, std::map<id_t, value_t>>> Lightroom::_knobsValues 
 		{7, DEFAULT_VALUE},
 		{8, NO_VALUE}}}}},
 };
+
 // ----------------------------------------------------------------------------------------------------
 
 void Lightroom::_test(params_t params)
