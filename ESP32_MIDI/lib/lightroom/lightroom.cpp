@@ -9,6 +9,137 @@ Lightroom::~Lightroom() { log_i("~Lightroom"); }
 
 current_t Lightroom::_current = (current_t){Basic, 1};
 
+std::map<Menu, std::map<id_t, std::map<id_t, value_t>>> Lightroom::_knobsValues = {
+	{None,
+	 {{1,
+	   {{0, DEFAULT_VALUE}}}}},
+
+	{Basic,
+	 {{1,
+	   {{1, DEFAULT_VALUE},
+		{2, DEFAULT_VALUE},
+		{3, DEFAULT_VALUE},
+		{4, DEFAULT_VALUE},
+		{5, DEFAULT_VALUE},
+		{6, DEFAULT_VALUE},
+		{7, DEFAULT_VALUE},
+		{8, DEFAULT_VALUE}}},
+	  {2,
+	   {{1, DEFAULT_VALUE},
+		{2, DEFAULT_VALUE},
+		{3, DEFAULT_VALUE},
+		{4, DEFAULT_VALUE},
+		{5, DEFAULT_VALUE},
+		{6, NO_VALUE},
+		{7, NO_VALUE},
+		{8, NO_VALUE}}}}},
+
+	{ToneCurve,
+	 {{1,
+	   {{1, DEFAULT_VALUE},
+		{2, DEFAULT_VALUE},
+		{3, DEFAULT_VALUE},
+		{4, DEFAULT_VALUE},
+		{5, DEFAULT_VALUE},
+		{6, DEFAULT_VALUE},
+		{7, DEFAULT_VALUE},
+		{8, NO_VALUE}}}}},
+
+	{HSL_Color,
+	 {{1,
+	   {{1, DEFAULT_VALUE},
+		{2, DEFAULT_VALUE},
+		{3, DEFAULT_VALUE},
+		{4, DEFAULT_VALUE},
+		{5, DEFAULT_VALUE},
+		{6, DEFAULT_VALUE},
+		{7, DEFAULT_VALUE},
+		{8, DEFAULT_VALUE}}}}},
+
+	{ColorGrading,
+	 {{1,
+	   {{1, DEFAULT_VALUE},
+		{2, DEFAULT_VALUE},
+		{3, DEFAULT_VALUE},
+		{4, DEFAULT_VALUE},
+		{5, DEFAULT_VALUE},
+		{6, NO_VALUE},
+		{7, NO_VALUE},
+		{8, NO_VALUE}}}}},
+
+	{Detail,
+	 {{1,
+	   {{1, DEFAULT_VALUE},
+		{2, DEFAULT_VALUE},
+		{3, DEFAULT_VALUE},
+		{4, DEFAULT_VALUE},
+		{5, NO_VALUE},
+		{6, NO_VALUE},
+		{7, NO_VALUE},
+		{8, NO_VALUE}}},
+	  {2,
+	   {{1, DEFAULT_VALUE},
+		{2, DEFAULT_VALUE},
+		{3, DEFAULT_VALUE},
+		{4, DEFAULT_VALUE},
+		{5, DEFAULT_VALUE},
+		{6, DEFAULT_VALUE},
+		{7, NO_VALUE},
+		{8, NO_VALUE}}}}},
+
+	{LensCorrection,
+	 {{1,
+	   {{1, DEFAULT_VALUE},
+		{2, DEFAULT_VALUE},
+		{3, DEFAULT_VALUE},
+		{4, DEFAULT_VALUE},
+		{5, DEFAULT_VALUE},
+		{6, DEFAULT_VALUE},
+		{7, DEFAULT_VALUE},
+		{8, NO_VALUE}}},
+	  {2,
+	   {{1, DEFAULT_VALUE},
+		{2, DEFAULT_VALUE},
+		{3, NO_VALUE},
+		{4, NO_VALUE},
+		{5, NO_VALUE},
+		{6, NO_VALUE},
+		{7, NO_VALUE},
+		{8, NO_VALUE}}}}},
+
+	{Transform,
+	 {{1,
+	   {{1, DEFAULT_VALUE},
+		{2, DEFAULT_VALUE},
+		{3, DEFAULT_VALUE},
+		{4, DEFAULT_VALUE},
+		{5, DEFAULT_VALUE},
+		{6, DEFAULT_VALUE},
+		{7, DEFAULT_VALUE},
+		{8, NO_VALUE}}}}},
+
+	{Effects,
+	 {{1,
+	   {{1, DEFAULT_VALUE},
+		{2, DEFAULT_VALUE},
+		{3, DEFAULT_VALUE},
+		{4, DEFAULT_VALUE},
+		{5, DEFAULT_VALUE},
+		{6, DEFAULT_VALUE},
+		{7, DEFAULT_VALUE},
+		{8, DEFAULT_VALUE}}}}},
+
+	{Calibration,
+	 {{1,
+	   {{1, DEFAULT_VALUE},
+		{2, DEFAULT_VALUE},
+		{3, DEFAULT_VALUE},
+		{4, DEFAULT_VALUE},
+		{5, DEFAULT_VALUE},
+		{6, DEFAULT_VALUE},
+		{7, DEFAULT_VALUE},
+		{8, NO_VALUE}}}}},
+};
 // ----------------------------------------------------------------------------------------------------
 
 void Lightroom::_test(params_t params)
@@ -86,20 +217,20 @@ void Lightroom::_buttonsLogic(id_t id, ReadState state)
 	case 8:
 		break;
 	case 9:
-		//* Changing menu updates leds and writes LCD
+		//* Changing menu updates leds and LCD
 		break;
 	case 10:
-		//* Changing menu updates leds and writes LCD
+		//* Changing menu updates leds and LCD
 		break;
 	case 11:
-		//* Changing menu updates leds and writes LCD
+		//* Changing menu updates leds and LCD
 		if (_current.subMenu > SubMenus.at(_current.menu))
 			_current.subMenu--;
 		else
 			_current.subMenu = SubMenus.at(_current.menu);
 		break;
 	case 12:
-		//* Changing menu updates leds and writes LCD
+		//* Changing menu updates leds and LCD
 		if (_current.subMenu < SubMenus.at(_current.menu))
 			_current.subMenu++;
 		else

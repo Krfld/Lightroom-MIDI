@@ -66,7 +66,7 @@ private:
 	static void _knobsTask(void *pvParameters);
 
 	std::map<id_t, Expander *> _expanders;
-	std::map<id_t, Led *> _leds;
+	std::map<id_t, Led *> _leds; // TODO associate led with device
 	std::map<id_t, Button *> _buttons;
 	std::map<id_t, Knob *> _knobs;
 
