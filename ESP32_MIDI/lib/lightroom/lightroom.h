@@ -7,6 +7,7 @@
 #include "devices.h"
 
 typedef uint8_t value_t;
+typedef uint8_t subMenu_t;
 
 #define NO_VALUE (value_t)(-1)
 #define MIN_VALUE 0
@@ -54,7 +55,7 @@ const std::map<Menu, id_t> SubMenus = {
 typedef struct
 {
 	Menu menu;
-	id_t subMenu;
+	subMenu_t subMenu;
 } current_t;
 
 class Lightroom
@@ -70,8 +71,8 @@ private:
 	static void _buttonsLogic(id_t id, ReadState state);
 	static void _knobsLogic(id_t id, ReadState state);
 
-	// static std::map<Menu, std::map<id_t, std::map<id_t, value_t>>> _buttonsValues;
-	static std::map<Menu, std::map<id_t, std::map<id_t, value_t>>> _knobsValues;
+	static std::map<Menu, std::map<subMenu_t, std::map<id_t, value_t>>> _buttonsValues;
+	static std::map<Menu, std::map<subMenu_t, std::map<id_t, value_t>>> _knobsValues;
 
 public:
 	Lightroom();

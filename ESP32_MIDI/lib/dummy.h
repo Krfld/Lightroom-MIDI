@@ -2,6 +2,7 @@
 
 typedef uint8_t id_t;
 typedef uint8_t value_t;
+typedef uint8_t subMenu_t;
 
 #define NO_VALUE (value_t)(-1)
 #define MIN_VALUE 0
@@ -365,7 +366,7 @@ const std::map<id_t, std::map<Menu, void (*)()>> knobsFunctions2 = {
 	  {Calibration, []() {}}}},
 };
 
-std::map<Menu, std::map<id_t, std::map<id_t, value_t>>> _knobsValues = {
+std::map<Menu, std::map<subMenu_t, std::map<id_t, value_t>>> _knobsValues = {
 	{None,
 	 {{1,
 	   {{0, DEFAULT_VALUE}}}}},
