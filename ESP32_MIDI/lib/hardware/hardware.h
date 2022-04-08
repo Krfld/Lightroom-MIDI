@@ -85,7 +85,7 @@ public:
 
 // ----------------------------------------------------------------------------------------------------
 
-class Led
+class Led // TODO change to LED strip
 {
 private:
 	Expander *_expander;
